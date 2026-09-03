@@ -1,0 +1,44 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+
+.sigils {
+  display: flex;
+  gap: var(--space-4);
+}
+
+.option {
+  position: relative;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+}
+
+.sigil {
+  box-shadow: 0 0 0 1px rgba(147, 164, 198, 0.22);
+  transition: box-shadow var(--duration-fast) ease;
+}
+
+.option:hover .sigil {
+  box-shadow: 0 0 0 1px var(--edge-gold-strong);
+}
+
+.selected .sigil {
+  box-shadow: 0 0 0 1px var(--gold);
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  color: var(--faint);
+}
+
+.cursor {
+  position: absolute;
+  left: 50%;
+  top: -13px;
+  transform: translateX(-50%);
+  color: var(--gold);
+}

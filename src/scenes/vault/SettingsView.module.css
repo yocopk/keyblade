@@ -1,0 +1,57 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+
+.settings {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  max-width: 620px;
+  animation: kb-slide-in 0.32s ease both;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.toggleRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px var(--space-4);
+  background: var(--abyss);
+  border: 1px solid var(--edge-cool-faint);
+  border-radius: var(--radius-xs);
+}
+
+.toggleText {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.toggleLabel {
+  font-size: var(--text-md);
+  color: var(--radiance);
+}
+
+.toggleDesc {
+  font-size: var(--text-sm);
+  color: var(--muted);
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+.lockGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.code {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--ice);
+}

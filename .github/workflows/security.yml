@@ -13,7 +13,7 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  audit:
+  advisories:
     name: Known vulnerabilities
     runs-on: ubuntu-latest
     steps:
@@ -21,9 +21,15 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
       - uses: taiki-e/install-action@v2
         with:
-          tool: cargo-audit
-      - name: cargo audit
-        run: cargo audit --deny warnings
+          tool: cargo-deny
+
+      # cargo-deny rather than cargo-audit, because it honours the target list
+      # in deny.toml. cargo-audit scans Cargo.lock whole, which on this project
+      # means reporting unmaintained GTK3 bindings that a Windows build never
+      # compiles. Findings nobody can act on are worse than no findings: they
+      # teach everyone to skip the job.
+      - name: Advisories for the shipped target
+        run: cargo deny check advisories
 
   fuzz:
     name: Fuzz the untrusted parsers

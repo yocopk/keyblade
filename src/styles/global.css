@@ -2,6 +2,7 @@
  * SPDX-FileCopyrightText: 2026 Andrea Marchese */
 
 @import "./tokens.css";
+@import "./motion.css";
 
 *,
 *::before,
@@ -24,8 +25,7 @@ body {
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
 
-  /* A vault is not a web page. Text selection and the context menu are opt-in
-     per element, and dragging the window by its content is not a thing. */
+  /* A vault is not a web page: selection and dragging are opt-in per element. */
   user-select: none;
   -webkit-user-select: none;
   overscroll-behavior: none;
@@ -39,14 +39,18 @@ textarea {
   -webkit-user-select: text;
 }
 
+::selection {
+  background: rgba(232, 193, 112, 0.28);
+}
+
 :focus-visible {
-  outline: var(--border-accent) solid var(--gold);
+  outline: 2px solid var(--gold);
   outline-offset: 2px;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-xs);
 }
 
 /* The command menu is driven by the keyboard, so focus must always be visible.
-   Removing the outline anywhere in this application is a bug, not a style. */
+   Removing this outline anywhere in this application is a bug, not a style. */
 :focus:not(:focus-visible) {
   outline: none;
 }
@@ -54,4 +58,20 @@ textarea {
 button {
   font: inherit;
   color: inherit;
+  cursor: pointer;
+}
+
+input {
+  font: inherit;
+  color: inherit;
+}
+
+input::placeholder {
+  color: var(--faint);
+}
+
+/* Scrollbars, so the panes do not punch a bright strip through a dark room. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--glass) transparent;
 }

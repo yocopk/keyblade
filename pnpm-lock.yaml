@@ -18,6 +18,9 @@ importers:
         specifier: ^19.1.0
         version: 19.2.8(react@19.2.8)
     devDependencies:
+      '@material-symbols/svg-400':
+        specifier: ^0.47.0
+        version: 0.47.0
       '@tauri-apps/cli':
         specifier: ^2
         version: 2.11.4
@@ -293,6 +296,9 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
+
+  '@material-symbols/svg-400@0.47.0':
+    resolution: {integrity: sha512-M3vW/MQCkr7NlN+1D9LDwRiKJeUjXbUB/O3gqPExNFAz1Vk/IFr0Ajlhr/lXVti46yhWknooVKAYMQj4o1VE3w==}
 
   '@napi-rs/lzma-linux-x64-gnu@1.5.1':
     resolution: {integrity: sha512-oTXEIha4SsuXdTA4Iyskj0kpdx2yVXdhd75c2v3xGrHFfVMsbhTPZU/nMPL4sWKo4pBHm3aucLaqGlF696dTyQ==}
@@ -944,6 +950,8 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.6.0
+
+  '@material-symbols/svg-400@0.47.0': {}
 
   '@napi-rs/lzma-linux-x64-gnu@1.5.1':
     optional: true

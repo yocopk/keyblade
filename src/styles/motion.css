@@ -1,0 +1,124 @@
+/* SPDX-License-Identifier: AGPL-3.0-only
+ * SPDX-FileCopyrightText: 2026 Andrea Marchese
+ *
+ * Every animation in the application, in one place.
+ *
+ * All of them move only transform and opacity, which the compositor can handle
+ * without laying out or painting again. Nothing here animates width, height,
+ * top or left.
+ *
+ * Two switches turn them off: the user's own setting, honoured through
+ * prefers-reduced-motion, and the in-app Animations toggle, which sets
+ * data-motion="off" on the application root.
+ */
+
+@keyframes kb-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.965);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes kb-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes kb-glow {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.78;
+  }
+}
+
+@keyframes kb-halo {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scale(1.045);
+    opacity: 0.62;
+  }
+}
+
+@keyframes kb-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes kb-bob {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(3px);
+  }
+}
+
+@keyframes kb-sweep {
+  0% {
+    transform: translateX(-120%);
+  }
+  55%,
+  100% {
+    transform: translateX(320%);
+  }
+}
+
+@keyframes kb-fill {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes kb-flash {
+  0% {
+    opacity: 0;
+  }
+  70% {
+    opacity: 0;
+  }
+  88% {
+    opacity: 0.85;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* The in-app switch. The media query below is the user's own preference and
+   always wins, whatever the switch says. */
+[data-motion="off"],
+[data-motion="off"] * {
+  animation: none !important;
+  transition: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

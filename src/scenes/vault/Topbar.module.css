@@ -1,0 +1,28 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+
+.topbar {
+  height: var(--topbar-height);
+  flex: none;
+  border-bottom: 1px solid var(--edge-cool-faint);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: 0 var(--space-6);
+}
+
+.search {
+  flex: 1;
+  min-width: 0;
+}
+
+.captureBadge {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--muted);
+  border: 1px solid var(--edge-cool);
+  border-radius: var(--radius-xs);
+  height: var(--control-md);
+  padding: 0 11px;
+  flex: none;
+}

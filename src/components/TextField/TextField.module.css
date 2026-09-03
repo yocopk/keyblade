@@ -1,0 +1,29 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+
+.field {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  height: var(--height, var(--control-lg));
+  padding: 0 var(--space-3);
+  background: var(--surface, var(--sunken));
+  border: 1px solid var(--border, var(--edge-cool));
+  border-radius: var(--radius-xs);
+  transition: border-color var(--duration-fast) ease;
+}
+
+.field:focus-within {
+  border-color: var(--edge-gold-strong);
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: 0;
+  outline: none;
+  color: var(--radiance);
+  font-family: var(--input-font, var(--font-mono));
+  font-size: var(--input-size, var(--text-sm));
+  letter-spacing: var(--input-tracking, 0.03em);
+}
