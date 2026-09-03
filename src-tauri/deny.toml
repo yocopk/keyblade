@@ -1,0 +1,64 @@
+# cargo-deny configuration.
+#
+# The bans section is not style enforcement, it is the mechanism that makes the
+# "no network" promise in the README checkable by someone who does not trust us.
+# A reviewer runs `cargo deny check` and gets an answer, instead of reading every
+# dependency by hand.
+
+[advisories]
+yanked = "deny"
+
+[licenses]
+# AGPL-3.0 can only take in code it is allowed to combine with. The first entry is
+# this project's own licence: cargo-deny checks the root crate too.
+allow = [
+    "AGPL-3.0-only",
+    "MIT",
+    "Apache-2.0",
+    "Apache-2.0 WITH LLVM-exception",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "ISC",
+    "Unicode-3.0",
+    "CC0-1.0",
+    "Zlib",
+]
+confidence-threshold = 0.93
+# Allowances for licences not currently in the graph are forward-looking, not
+# mistakes. Warning about them is noise.
+unused-allowed-license = "allow"
+
+[bans]
+multiple-versions = "warn"
+wildcards = "deny"
+
+# Any of these entering the graph, even transitively, fails the build. Keyblade
+# opens no sockets, so it has no legitimate use for a single one of them.
+deny = [
+    { name = "reqwest" },
+    { name = "hyper" },
+    { name = "h2" },
+    { name = "ureq" },
+    { name = "curl" },
+    { name = "curl-sys" },
+    { name = "isahc" },
+    { name = "surf" },
+    { name = "attohttpc" },
+    { name = "tungstenite" },
+    { name = "tokio-tungstenite" },
+    { name = "async-std" },
+    { name = "socket2" },
+    { name = "mio" },
+    { name = "trust-dns-resolver" },
+    { name = "hickory-resolver" },
+    { name = "native-tls" },
+    { name = "openssl" },
+    { name = "openssl-sys" },
+    { name = "rustls" },
+    { name = "quinn" },
+]
+
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]

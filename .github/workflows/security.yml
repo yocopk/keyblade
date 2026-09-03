@@ -1,0 +1,50 @@
+name: Security
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    # Advisories appear after code is written, so this has to run on a clock and
+    # not only when something changes.
+    - cron: "0 6 * * 1"
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  audit:
+    name: Known vulnerabilities
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: taiki-e/install-action@cargo-audit
+      - name: cargo audit
+        working-directory: src-tauri
+        run: cargo audit --deny warnings
+
+  fuzz:
+    name: Fuzz the untrusted parsers
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@nightly
+      - uses: taiki-e/install-action@cargo-fuzz
+
+      # A short run on every change. It will not find deep bugs, but it does
+      # catch a regression that makes a malformed blob panic.
+      - name: Fuzz the header parser
+        working-directory: src-tauri
+        run: cargo fuzz run header_parse -- -max_total_time=60
+
+      - name: Fuzz the decryption path
+        working-directory: src-tauri
+        run: cargo fuzz run decrypt_blob -- -max_total_time=60
+
+      - name: Upload crash artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fuzz-artifacts
+          path: src-tauri/fuzz/artifacts/
