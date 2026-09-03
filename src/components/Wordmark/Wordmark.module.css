@@ -1,0 +1,55 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+
+.wordmark {
+  display: flex;
+  align-items: center;
+  gap: var(--gap, var(--space-4));
+  min-width: 0;
+}
+
+.name {
+  font-family: var(--font-wordmark);
+  font-weight: 700;
+  font-size: var(--name-size, var(--text-display));
+  line-height: 1.05;
+  letter-spacing: var(--tracking-wordmark);
+  white-space: nowrap;
+  background: linear-gradient(
+    180deg,
+    var(--gold-light) 0%,
+    var(--gold-mid) 42%,
+    var(--gold) 62%,
+    var(--gold-deep) 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  /* The fallback matters: if the clip is unsupported the mark stays gold rather
+     than disappearing into the background. */
+  color: var(--gold);
+  filter: drop-shadow(0 0 18px rgba(232, 193, 112, 0.28));
+}
+
+.diamond {
+  width: var(--diamond, 5px);
+  height: var(--diamond, 5px);
+  flex: none;
+  background: var(--gold);
+  transform: rotate(45deg);
+}
+
+.ruleLeft,
+.ruleRight {
+  height: 1px;
+  flex: var(--rule-flex, none);
+  width: var(--rule-width, clamp(24px, 5vw, 54px));
+  min-width: 6px;
+}
+
+.ruleLeft {
+  background: linear-gradient(90deg, transparent, rgba(232, 193, 112, 0.75));
+}
+
+.ruleRight {
+  background: linear-gradient(270deg, transparent, rgba(232, 193, 112, 0.75));
+}

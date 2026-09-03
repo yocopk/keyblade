@@ -1,0 +1,29 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+
+.deriving {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  height: 172px;
+  justify-content: center;
+}
+
+.track {
+  height: 2px;
+  background: rgba(147, 164, 198, 0.18);
+  overflow: hidden;
+}
+
+.bar {
+  height: 100%;
+  background: var(--gold);
+  transform-origin: left center;
+  animation: kb-fill var(--derive-duration, 1.05s) linear both;
+}
+
+.detail {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--muted);
+  line-height: 1.6;
+}

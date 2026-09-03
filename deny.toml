@@ -1,0 +1,102 @@
+# cargo-deny configuration.
+#
+# The bans section is not style enforcement, it is the mechanism that makes the
+# "no network" promise in the README checkable by someone who does not trust us.
+# A reviewer runs `cargo deny check` and gets an answer, instead of reading every
+# dependency by hand.
+
+# Only the target this project actually ships is examined.
+#
+# This is not a loophole, it is the correct scope. Tauri pulls a full HTTP stack
+# (reqwest, hyper, mio, socket2) and the GTK3 bindings on Linux and macOS, none
+# of which are compiled into a Windows build. Auditing code that never reaches
+# the binary produces findings nobody can act on, and trains everyone to ignore
+# the tool. When another platform is added, its triple is added here and the
+# findings become real.
+#
+# Verified with:
+#   cargo tree -p keyblade -i reqwest --target x86_64-pc-windows-msvc  -> absent
+#   cargo tree -p keyblade -i tokio -e features --target …-msvc        -> no "net"
+[graph]
+targets = ["x86_64-pc-windows-msvc"]
+all-features = false
+
+[advisories]
+yanked = "deny"
+# Vulnerabilities are denied by default and stay that way.
+#
+# "Unmaintained" is a different class of finding: it is a signal about the
+# future, not a live defect. It is enforced on what this project chose to depend
+# on, and reported but not fatal for transitive crates, where the answer is
+# upstream's to give and blocking on it would only mean disabling the check.
+unmaintained = "workspace"
+
+[licenses]
+# AGPL-3.0 can only take in code it is allowed to combine with. The first entry is
+# this project's own licence: cargo-deny checks the root crate too.
+allow = [
+    "AGPL-3.0-only",
+    "MIT",
+    "Apache-2.0",
+    "Apache-2.0 WITH LLVM-exception",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "ISC",
+    "Unicode-3.0",
+    "CC0-1.0",
+    "Zlib",
+    # MPL-2.0 is file-level copyleft and explicitly GPL/AGPL compatible: section
+    # 3.3 permits distributing a larger work under a Secondary License, and
+    # AGPL-3.0 is named as one. The MPL files stay MPL, which costs nothing
+    # because this project does not modify them.
+    # Arrives via cssparser, selectors and option-ext, all under Tauri.
+    "MPL-2.0",
+]
+confidence-threshold = 0.93
+# Allowances for licences not currently in the graph are forward-looking, not
+# mistakes. Warning about them is noise.
+unused-allowed-license = "allow"
+
+[bans]
+multiple-versions = "warn"
+wildcards = "deny"
+# Workspace-internal path dependencies carry no version. They are ours.
+allow-wildcard-paths = true
+
+# Any of these entering the graph of the shipped target, even transitively,
+# fails the build. Keyblade opens no sockets, so it has no legitimate use for a
+# single one of them.
+#
+# tokio is deliberately NOT on this list: Tauri links it on Windows, but with
+# features bytes/fs/io-util/rt/rt-multi-thread/sync and WITHOUT "net", so its
+# socket code is never compiled. Banning it would be banning an async runtime,
+# not networking. If "net" ever appears, reqwest or hyper appears with it and
+# the entries below catch it.
+deny = [
+    { name = "reqwest" },
+    { name = "hyper" },
+    { name = "h2" },
+    { name = "ureq" },
+    { name = "curl" },
+    { name = "curl-sys" },
+    { name = "isahc" },
+    { name = "surf" },
+    { name = "attohttpc" },
+    { name = "tungstenite" },
+    { name = "tokio-tungstenite" },
+    { name = "async-std" },
+    { name = "socket2" },
+    { name = "mio" },
+    { name = "trust-dns-resolver" },
+    { name = "hickory-resolver" },
+    { name = "native-tls" },
+    { name = "openssl" },
+    { name = "openssl-sys" },
+    { name = "rustls" },
+    { name = "quinn" },
+]
+
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]

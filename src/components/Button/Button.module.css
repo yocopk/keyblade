@@ -1,0 +1,107 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+
+.button {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  height: var(--height);
+  padding: 0 var(--pad-x);
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--border);
+  background: var(--fill);
+  color: var(--ink);
+  transition:
+    background-color var(--duration-fast) ease,
+    border-color var(--duration-fast) ease,
+    color var(--duration-fast) ease;
+}
+
+.button:hover:not(:disabled) {
+  background: var(--fill-hover);
+  border-color: var(--border-hover);
+  color: var(--ink-hover);
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.label {
+  position: relative;
+  white-space: nowrap;
+}
+
+/* Variants. Each sets only the custom properties the base rule reads, so there
+   is one place where a button's box is described. */
+.primary {
+  --border: var(--gold);
+  --fill: var(--fill-gold);
+  --fill-hover: var(--fill-gold-hover);
+  --border-hover: var(--gold);
+  --ink: var(--radiance);
+  --ink-hover: var(--radiance);
+  font-family: var(--font-display);
+  letter-spacing: 0.06em;
+}
+
+.secondary {
+  --border: var(--edge-cool-strong);
+  --fill: transparent;
+  --fill-hover: transparent;
+  --border-hover: var(--edge-gold-strong);
+  --ink: var(--muted);
+  --ink-hover: var(--radiance);
+}
+
+.danger {
+  --border: var(--edge-danger);
+  --fill: transparent;
+  --fill-hover: var(--fill-danger-hover);
+  --border-hover: var(--edge-danger);
+  --ink: var(--danger);
+  --ink-hover: var(--danger);
+  font-family: var(--font-mono);
+  letter-spacing: var(--tracking-wide);
+}
+
+.quiet {
+  --border: var(--edge-gold);
+  --fill: transparent;
+  --fill-hover: rgba(232, 193, 112, 0.14);
+  --border-hover: var(--edge-gold-strong);
+  --ink: var(--gold);
+  --ink-hover: var(--gold);
+}
+
+/* Sizes. */
+.sm {
+  --height: var(--control-sm);
+  --pad-x: var(--space-2);
+  font-size: var(--text-2xs);
+}
+.md {
+  --height: var(--control-md);
+  --pad-x: var(--space-3);
+  font-size: var(--text-sm);
+}
+.lg {
+  --height: var(--control-lg);
+  --pad-x: var(--space-4);
+  font-size: var(--text-base);
+}
+.xl {
+  --height: var(--control-xl);
+  --pad-x: var(--space-4);
+  font-size: 1.0625rem;
+}
+
+/* Square, for icon-only actions. */
+.iconOnly {
+  padding: 0;
+  width: var(--height);
+  flex: none;
+}

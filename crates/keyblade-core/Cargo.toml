@@ -1,0 +1,33 @@
+[package]
+name = "keyblade-core"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+description = "Cryptographic core for Keyblade, an offline encrypted vault"
+publish = false
+
+[lib]
+name = "keyblade_core"
+path = "src/lib.rs"
+
+[dependencies]
+# Primitives. None of these are wrapped or reimplemented; see CONTRIBUTING.md.
+argon2 = "0.5"
+chacha20poly1305 = { version = "0.10", features = ["stream"] }
+blake3 = "1.5"
+
+# Hygiene.
+zeroize = { version = "1.8", features = ["derive"] }
+subtle = "2.6"
+
+# Randomness. Pinned to the same rand_core the AEAD stack uses so OsRng is one type.
+rand_core = { version = "0.6", features = ["getrandom"] }
+
+thiserror = "2"
+
+[dev-dependencies]
+hex = "0.4"
+tempfile = "3"

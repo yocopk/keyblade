@@ -1,0 +1,13 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+
+.hatch {
+  background-color: var(--hatch-surface, var(--sunken));
+  background-image: repeating-linear-gradient(
+    115deg,
+    rgba(147, 164, 198, 0.09) 0 1px,
+    transparent 1px 9px
+  );
+  border: 1px var(--hatch-border-style, dashed) var(--hatch-border, var(--edge-gold-strong));
+  border-radius: var(--radius-xs);
+  transition: border-color var(--duration-fast) ease;
+}

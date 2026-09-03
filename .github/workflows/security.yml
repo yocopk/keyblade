@@ -13,7 +13,7 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  audit:
+  advisories:
     name: Known vulnerabilities
     runs-on: ubuntu-latest
     steps:
@@ -21,10 +21,15 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
       - uses: taiki-e/install-action@v2
         with:
-          tool: cargo-audit
-      - name: cargo audit
-        working-directory: src-tauri
-        run: cargo audit --deny warnings
+          tool: cargo-deny
+
+      # cargo-deny rather than cargo-audit, because it honours the target list
+      # in deny.toml. cargo-audit scans Cargo.lock whole, which on this project
+      # means reporting unmaintained GTK3 bindings that a Windows build never
+      # compiles. Findings nobody can act on are worse than no findings: they
+      # teach everyone to skip the job.
+      - name: Advisories for the shipped target
+        run: cargo deny check advisories
 
   fuzz:
     name: Fuzz the untrusted parsers
@@ -41,11 +46,11 @@ jobs:
       # A short run on every change. It will not find deep bugs, but it does
       # catch a regression that makes a malformed blob panic.
       - name: Fuzz the header parser
-        working-directory: src-tauri
+        working-directory: crates/keyblade-core
         run: cargo fuzz run --target x86_64-unknown-linux-gnu header-parse -- -max_total_time=60
 
       - name: Fuzz the decryption path
-        working-directory: src-tauri
+        working-directory: crates/keyblade-core
         run: cargo fuzz run --target x86_64-unknown-linux-gnu decrypt-blob -- -max_total_time=60
 
       - name: Upload crash artifacts
@@ -53,4 +58,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: fuzz-artifacts
-          path: src-tauri/fuzz/artifacts/
+          path: crates/keyblade-core/fuzz/artifacts/

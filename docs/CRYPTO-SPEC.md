@@ -1,6 +1,6 @@
 # Cryptographic specification
 
-Normative for everything under `src-tauri/src/crypto/`. The blob format has its
+Normative for everything under `crates/keyblade-core/src/crypto/`. The blob format has its
 own document, [`FILE-FORMAT.md`](FILE-FORMAT.md).
 
 ## Primitives
@@ -159,7 +159,7 @@ rather than this library:
 
 ## What is tested, and what that proves
 
-55 tests, all in CI.
+57 tests, all in CI.
 
 **Round-trip and boundary** — every size around the chunk boundary, from empty
 to two chunks plus one byte. These prove the happy path works.

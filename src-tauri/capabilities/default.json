@@ -1,0 +1,7 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Permissions for the main window. Deliberately minimal: every entry added here widens what a compromised web layer can reach, so the list stays as short as the application can function with.",
+  "windows": ["main"],
+  "permissions": ["core:default"]
+}

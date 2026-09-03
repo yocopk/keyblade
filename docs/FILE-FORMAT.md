@@ -1,6 +1,6 @@
 # Blob file format, version 1
 
-Normative. This document and `src-tauri/src/crypto/stream.rs` must agree; where
+Normative. This document and `crates/keyblade-core/src/crypto/stream.rs` must agree; where
 they disagree, the code is wrong until one of them changes deliberately.
 
 The format is locked by a test vector in `stream.rs::tests::wire_format_is_stable`.

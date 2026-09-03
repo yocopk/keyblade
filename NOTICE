@@ -15,6 +15,31 @@ with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 ---
 
+THIRD-PARTY MATERIAL
+
+This program bundles the following, each under its own licence. None of it is
+covered by the AGPL grant above, and all of it is redistributed under terms that
+permit inclusion in an AGPL-3.0 work.
+
+Icons
+  Material Symbols (Google), licensed under the Apache License 2.0.
+  Path data is generated into src/components/Icon/paths.ts by
+  scripts/build-icons.mjs. Upstream: https://github.com/google/material-design-icons
+
+Typefaces, each licensed under the SIL Open Font License 1.1
+  Marcellus            (c) Astigmatic. Licence: src/assets/fonts/marcellus-OFL.txt
+  Cinzel Decorative    (c) Natanael Gama.
+                       Licence: src/assets/fonts/cinzel-decorative-OFL.txt
+  IBM Plex Sans        (c) IBM Corp.
+                       Licence: src/assets/fonts/ibm-plex-sans-OFL.txt
+  IBM Plex Mono        (c) IBM Corp.
+                       Licence: src/assets/fonts/ibm-plex-mono-OFL.txt
+
+  The fonts are self-hosted, not fetched from a font service: this program makes
+  no network requests, and its Content-Security-Policy would block one.
+
+---
+
 The name "Keyblade", the Keyblade logo and the project's visual identity are NOT
 licensed under the AGPL. See TRADEMARKS.md.
 

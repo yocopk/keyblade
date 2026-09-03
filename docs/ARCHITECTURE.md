@@ -31,20 +31,28 @@ around it, so they are recorded here with the reason rather than left implicit.
 └──────────────┬─────────────────────────┘
                │  Tauri IPC, explicit allowlist
 ┌──────────────▼─────────────────────────┐
-│  Rust                                  │
-│  ipc/       validated command surface  │
-│  vault/     header, database, blobs    │
-│  crypto/    keys never leave here      │
-│  platform/  Windows-specific hardening │
+│  src-tauri/         the application    │
+│    ipc/       validated command surface│
+│    vault/     header, database, blobs  │
+│    platform/  Windows hardening (unsafe│
+│               is permitted here only)  │
+├────────────────────────────────────────┤
+│  crates/keyblade-core/                 │
+│    crypto/    keys never leave here    │
+│    #![forbid(unsafe_code)]             │
 └────────────────────────────────────────┘
 ```
+
+The two crates are split so the core can forbid unsafe code permanently. The
+Windows integration needs `unsafe`; in one crate that would mean dropping the
+guarantee from the cryptography too.
 
 **No key material crosses the IPC boundary.** The frontend asks for an item and
 receives its decrypted value; it never receives the vault key, a subkey or a
 content key. If the WebView is compromised, the attacker gets what is currently
 on screen, not the vault.
 
-`ipc/` is treated the way a public HTTP endpoint is treated: every command
+`src-tauri/src/ipc/` is treated the way a public HTTP endpoint is treated: every command
 validates its input, none accepts an arbitrary filesystem path, none returns
 cryptographic material.
 
@@ -116,6 +124,8 @@ The cryptographic core is written and tested before any interface exists. A
 correct crypto layer under an ugly interface is two weeks of design work away
 from being good; a beautiful interface over a broken crypto layer is thrown away.
 
-M0 is complete: 55 tests, a committed wire-format vector, two fuzz targets, and
-CI enforcing formatting, clippy, tests, documentation and the banned-dependency
-list. M1 onwards is tracked in the README.
+M0 is complete: 57 tests, a committed wire-format vector, two fuzz targets, and
+CI enforcing formatting, clippy, tests, documentation, the banned-dependency
+list and the frontend build. The application shell follows it — a Tauri 2
+workspace with a React frontend and the design tokens, with no vault behind it
+yet. M1 onwards is tracked in the README.

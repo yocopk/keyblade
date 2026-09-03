@@ -1,0 +1,134 @@
+/* SPDX-License-Identifier: AGPL-3.0-only
+ * SPDX-FileCopyrightText: 2026 Andrea Marchese
+ *
+ * Design tokens.
+ *
+ * These are the project's values. Anything coming from a design maps ONTO them;
+ * raw hex, px and font names do not appear in component code. A design that
+ * introduces a value with no equivalent here gets a token added, named to match,
+ * rather than an inline literal somewhere.
+ *
+ * The application is deliberately single-theme. It is a dark product: the lock
+ * screen is a lit window on a black ground, and a light variant would be a
+ * different design rather than this one inverted.
+ */
+
+:root {
+  color-scheme: dark;
+
+  /* ── Surfaces, from deepest to highest ────────────────────── */
+  --void: #080b14; /* the ground behind everything */
+  --sunken: #0a1122; /* sidebar, detail panel, dropzones */
+  --abyss: #0e1628; /* list rows, inputs, dialog body */
+  --glass: #17233f; /* command-menu boxes, toggle track */
+  --field: #101b32; /* the lock-screen password field */
+  --glass-ground: #0a1224; /* behind the stained glass itself */
+
+  /* ── Ink ──────────────────────────────────────────────────── */
+  --radiance: #f3eddf; /* primary text, warm off-white */
+  --muted: #93a4c6; /* secondary text */
+
+  /* Tertiary text. The design used #5C6F92, which measures 3.56:1 on --abyss
+     and is applied at 9.5-12px, i.e. small text needing 4.5:1. This is the
+     lightest value in the same hue that clears AA on every surface here.
+     See docs/DESIGN-DECISIONS.md. */
+  --faint: #7a8bab;
+
+  --ice: #c9d7f2; /* menu icons, inline code */
+
+  /* ── Accent ───────────────────────────────────────────────── */
+  --gold: #e8c170;
+  --gold-light: #fff8e4; /* top stop of the wordmark gradient */
+  --gold-mid: #f0d79b;
+  --gold-deep: #b78c3f; /* bottom stop */
+
+  /* ── Semantic ─────────────────────────────────────────────── */
+  /* Separate from the accent on purpose: gold must never read as "warning", or
+     the interface loses its only alarm colour. */
+  --danger: #e5534b;
+  --safe: #74c69d;
+
+  /* ── Borders ──────────────────────────────────────────────── */
+  /* Translucent, so a border sits correctly on any of the surfaces above. */
+  --edge-gold-faint: rgba(232, 193, 112, 0.14);
+  --edge-gold: rgba(232, 193, 112, 0.24);
+  --edge-gold-strong: rgba(232, 193, 112, 0.42);
+  --edge-cool-faint: rgba(147, 164, 198, 0.12);
+  --edge-cool: rgba(147, 164, 198, 0.2);
+  --edge-cool-strong: rgba(147, 164, 198, 0.28);
+  --edge-danger: rgba(229, 83, 75, 0.4);
+
+  /* ── Fills ────────────────────────────────────────────────── */
+  --fill-gold-faint: rgba(232, 193, 112, 0.05);
+  --fill-gold: rgba(232, 193, 112, 0.12);
+  --fill-gold-hover: rgba(232, 193, 112, 0.24);
+  --fill-danger-hover: rgba(229, 83, 75, 0.14);
+
+  /* ── Type ─────────────────────────────────────────────────── */
+  /* Self-hosted, never from a CDN: a font request is a network request, and
+     this application makes none. Files live in src/assets/fonts. */
+  --font-display: "Marcellus", Georgia, "Times New Roman", serif;
+  --font-wordmark: "Cinzel Decorative", "Marcellus", Georgia, serif;
+  --font-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", "Cascadia Mono", Consolas, monospace;
+
+  --text-2xs: 0.594rem; /* 9.5px, the letterspaced field labels */
+  --text-xs: 0.688rem; /* 11px */
+  --text-sm: 0.781rem; /* 12.5px */
+  --text-base: 0.844rem; /* 13.5px, the interface default */
+  --text-md: 0.906rem; /* 14.5px, menu and row titles */
+  --text-lg: 1.188rem; /* 19px, dialog titles */
+  --text-xl: 1.438rem; /* 23px, detail heading */
+  --text-2xl: 1.563rem; /* 25px, category heading */
+  --text-display: clamp(1.75rem, 4.2vh, 2.375rem);
+
+  --tracking-eyebrow: 0.2em;
+  --tracking-wide: 0.14em;
+  --tracking-wordmark: 0.1em;
+
+  /* ── Space ────────────────────────────────────────────────── */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+
+  /* ── Shape ────────────────────────────────────────────────── */
+  --radius-xs: 2px;
+  --radius-sm: 3px;
+  --radius-pill: 999px;
+
+  /* ── Control heights ──────────────────────────────────────── */
+  --control-sm: 26px;
+  --control-md: 38px;
+  --control-lg: 44px;
+  --control-xl: 52px;
+
+  /* ── Motion ───────────────────────────────────────────────── */
+  --duration-fast: 120ms;
+  --duration-normal: 300ms;
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  /* ── Layout ───────────────────────────────────────────────── */
+  --sidebar-width: 298px;
+  --topbar-height: 70px;
+  --detail-width: 404px;
+  --detail-min-width: 320px;
+  --list-min-width: 360px;
+
+  /* Below this the two-column body collapses to one. The mock assumed a fixed
+     1180px; the window can be narrower than that on a laptop. */
+  --breakpoint-split: 1180px;
+}
+
+/* Motion here is decoration, never information: nothing is communicated only by
+   movement, so switching it off costs the reader nothing. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 1ms;
+    --duration-normal: 1ms;
+  }
+}

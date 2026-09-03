@@ -1,0 +1,78 @@
+/* SPDX-License-Identifier: AGPL-3.0-only
+ * SPDX-FileCopyrightText: 2026 Andrea Marchese */
+
+@import "./fonts.css";
+@import "./tokens.css";
+@import "./motion.css";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--void);
+  color: var(--radiance);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+
+  /* A vault is not a web page: selection and dragging are opt-in per element. */
+  user-select: none;
+  -webkit-user-select: none;
+  overscroll-behavior: none;
+}
+
+/* Opt back in wherever content is meant to be read and copied. */
+[data-selectable],
+input,
+textarea {
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+::selection {
+  background: rgba(232, 193, 112, 0.28);
+}
+
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+  border-radius: var(--radius-xs);
+}
+
+/* The command menu is driven by the keyboard, so focus must always be visible.
+   Removing this outline anywhere in this application is a bug, not a style. */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+input {
+  font: inherit;
+  color: inherit;
+}
+
+input::placeholder {
+  color: var(--faint);
+}
+
+/* Scrollbars, so the panes do not punch a bright strip through a dark room. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--glass) transparent;
+}
