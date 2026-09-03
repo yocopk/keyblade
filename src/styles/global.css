@@ -1,6 +1,7 @@
 /* SPDX-License-Identifier: AGPL-3.0-only
  * SPDX-FileCopyrightText: 2026 Andrea Marchese */
 
+@import "./fonts.css";
 @import "./tokens.css";
 @import "./motion.css";
 

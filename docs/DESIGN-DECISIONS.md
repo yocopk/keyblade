@@ -73,8 +73,15 @@ a devDependency and never shipped. A subset font was the alternative; inline
 paths win because they tree-shake, they are readable in a diff, and they add no
 binary to a repository whose whole argument is that you can check what it does.
 
-The four text faces will be self-hosted in `src/assets/fonts` and are currently
-resolving to their fallback stacks.
+The four text faces are self-hosted in `src/assets/fonts`: Marcellus 400, Cinzel
+Decorative 700, IBM Plex Sans 400/500/600 and IBM Plex Mono 400/500, latin subset
+only, 128 kB of woff2 in total. `scripts/build-fonts.mjs` extracts them from the
+`@fontsource` packages, writes `src/styles/fonts.css`, and copies each licence
+alongside the files as the OFL requires. Only the weights the interface actually
+sets are shipped.
+
+Arrows (↑↓) fall outside the latin subset and render from the system fallback.
+That is correct rather than a gap: they are symbols, not text in these faces.
 
 ### The layout assumed a fixed 1180px
 
