@@ -51,7 +51,9 @@ jobs:
       # The README claims Keyblade never opens a socket. This is the check that
       # makes the claim verifiable by someone who does not trust the claim.
       - name: Install cargo-deny
-        uses: taiki-e/install-action@cargo-deny
+        uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-deny
 
       - name: Banned dependencies, licences and sources
         working-directory: src-tauri
