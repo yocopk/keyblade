@@ -106,6 +106,32 @@ The trade-off is stated in [`FILE-FORMAT.md`](FILE-FORMAT.md): a seek proves the
 chunk is genuine and correctly positioned, not that the file is complete. Only a
 sequential read gets truncation detection.
 
+## Audio
+
+Two delivery routes, because the files differ by three orders of magnitude.
+
+The five interface sounds total under 300 kB and have to fire the instant
+something is pressed, so they ship inside the frontend bundle and are preloaded
+at startup.
+
+The music is a fifty-minute track. It is **not** bundled: it is shipped beside
+the installed application as a Tauri resource and streamed from there. Embedding
+it would take the binary from about ten megabytes to nearly eighty, and the
+README's first claim about this program is that it is small. Keeping it outside
+also means the track can be replaced without rebuilding.
+
+Autoplay policy is not worked around, it is used. Browsers and the WebView refuse
+to play audio until the user has interacted with the page; the first sound is the
+one that plays when the vault unlocks, and the click that unlocks it is the
+gesture that grants permission. The music follows. Nothing can make noise before
+the user has asked for something.
+
+Every playback call is best-effort. A missing file, an unavailable codec, a
+policy refusal: none of them are worth an error in a vault, so they are swallowed
+and the interface carries on silently. That is also what makes the audio
+deletable — see the note in `NOTICE` about the licensing of these particular
+files.
+
 ## Auto-lock
 
 Locking must not depend on the user remembering to lock. Triggers:

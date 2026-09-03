@@ -8,6 +8,8 @@ import { EyebrowLabel } from "../../components/EyebrowLabel/EyebrowLabel";
 import { Icon, type IconName } from "../../components/Icon/Icon";
 import { SegmentedControl } from "../../components/SegmentedControl/SegmentedControl";
 import { Toggle } from "../../components/Toggle/Toggle";
+import { VolumeSlider } from "../../components/VolumeSlider/VolumeSlider";
+import type { SoundSettings } from "../../hooks/useAudio";
 import { useTranslation } from "../../i18n";
 import styles from "./SettingsView.module.css";
 
@@ -24,6 +26,8 @@ export interface VisualSettings {
 interface SettingsViewProps {
   settings: VisualSettings;
   onChange: (next: VisualSettings) => void;
+  sound: SoundSettings;
+  onSoundChange: (next: SoundSettings) => void;
   lockSeconds: number;
   onLockSecondsChange: (next: number) => void;
 }
@@ -38,6 +42,8 @@ interface SettingsViewProps {
 export function SettingsView({
   settings,
   onChange,
+  sound,
+  onSoundChange,
   lockSeconds,
   onLockSecondsChange,
 }: SettingsViewProps) {
@@ -82,6 +88,60 @@ export function SettingsView({
             </div>
           );
         })}
+      </div>
+
+      <div className={styles.lockGroup}>
+        <EyebrowLabel icon="volume_up">{t.sound.section}</EyebrowLabel>
+
+        <div className={styles.group}>
+          <div className={styles.toggleRow}>
+            <Icon name="graphic_eq" size={20} color="var(--gold)" />
+            <label className={styles.toggleText} htmlFor={`${groupId}-effects`}>
+              <span className={styles.toggleLabel}>{t.sound.effects}</span>
+              <span className={styles.toggleDesc}>{t.sound.effectsDesc}</span>
+            </label>
+            <Toggle
+              id={`${groupId}-effects`}
+              label={t.sound.effects}
+              checked={sound.effects}
+              onChange={(next) => onSoundChange({ ...sound, effects: next })}
+            />
+          </div>
+
+          <div className={styles.sliderRow}>
+            <VolumeSlider
+              icon="graphic_eq"
+              label={t.sound.effectsVolume}
+              value={sound.effectsVolume}
+              disabled={!sound.effects}
+              onChange={(next) => onSoundChange({ ...sound, effectsVolume: next })}
+            />
+          </div>
+
+          <div className={styles.toggleRow}>
+            <Icon name="music_note" size={20} color="var(--gold)" />
+            <label className={styles.toggleText} htmlFor={`${groupId}-music`}>
+              <span className={styles.toggleLabel}>{t.sound.music}</span>
+              <span className={styles.toggleDesc}>{t.sound.musicDesc}</span>
+            </label>
+            <Toggle
+              id={`${groupId}-music`}
+              label={t.sound.music}
+              checked={sound.music}
+              onChange={(next) => onSoundChange({ ...sound, music: next })}
+            />
+          </div>
+
+          <div className={styles.sliderRow}>
+            <VolumeSlider
+              icon="music_note"
+              label={t.sound.musicVolume}
+              value={sound.musicVolume}
+              disabled={!sound.music}
+              onChange={(next) => onSoundChange({ ...sound, musicVolume: next })}
+            />
+          </div>
+        </div>
       </div>
 
       <div className={styles.lockGroup}>
