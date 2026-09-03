@@ -1,0 +1,30 @@
+# Rust
+/src-tauri/target/
+/src-tauri/fuzz/target/
+/src-tauri/fuzz/corpus/
+/src-tauri/fuzz/artifacts/
+
+# Node
+node_modules/
+dist/
+.vite/
+
+# Build output
+*.msi
+*.exe
+*.pdb
+
+# Editors
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# NEVER commit a real vault or any key material
+*.kbld
+*.kb
+/vaults/
+*.key
+*.pem
+.env
+.env.local
