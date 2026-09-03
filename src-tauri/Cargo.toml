@@ -1,0 +1,44 @@
+[package]
+name = "keyblade-core"
+version = "0.0.0"
+edition = "2021"
+rust-version = "1.82"
+license = "AGPL-3.0-only"
+description = "Cryptographic core for Keyblade, an offline encrypted vault"
+repository = "https://github.com/yocopk/keyblade"
+publish = false
+
+[lib]
+name = "keyblade_core"
+path = "src/lib.rs"
+
+[dependencies]
+# Primitives. None of these are wrapped or reimplemented; see CONTRIBUTING.md.
+argon2 = "0.5"
+chacha20poly1305 = { version = "0.10", features = ["stream"] }
+blake3 = "1.5"
+
+# Hygiene.
+zeroize = { version = "1.8", features = ["derive"] }
+subtle = "2.6"
+
+# Randomness. Pinned to the same rand_core the AEAD stack uses so OsRng is one type.
+rand_core = { version = "0.6", features = ["getrandom"] }
+
+thiserror = "2"
+
+[dev-dependencies]
+hex = "0.4"
+tempfile = "3"
+
+[profile.release]
+# Keys must not survive in memory longer than intended, and panics must not unwind
+# through code holding key material.
+panic = "abort"
+lto = true
+codegen-units = 1
+strip = true
+
+[profile.test]
+# Argon2 with a 256 MiB floor is unusably slow in an unoptimised test build.
+opt-level = 2
