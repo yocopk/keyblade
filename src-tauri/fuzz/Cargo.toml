@@ -14,14 +14,14 @@ libfuzzer-sys = "0.4"
 path = ".."
 
 [[bin]]
-name = "header_parse"
+name = "header-parse"
 path = "fuzz_targets/header_parse.rs"
 test = false
 doc = false
 bench = false
 
 [[bin]]
-name = "decrypt_blob"
+name = "decrypt-blob"
 path = "fuzz_targets/decrypt_blob.rs"
 test = false
 doc = false

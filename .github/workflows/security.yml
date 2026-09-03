@@ -32,6 +32,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@nightly
+        with:
+          targets: x86_64-unknown-linux-gnu
       - uses: taiki-e/install-action@v2
         with:
           tool: cargo-fuzz
@@ -40,11 +42,11 @@ jobs:
       # catch a regression that makes a malformed blob panic.
       - name: Fuzz the header parser
         working-directory: src-tauri
-        run: cargo fuzz run header_parse -- -max_total_time=60
+        run: cargo fuzz run --target x86_64-unknown-linux-gnu header-parse -- -max_total_time=60
 
       - name: Fuzz the decryption path
         working-directory: src-tauri
-        run: cargo fuzz run decrypt_blob -- -max_total_time=60
+        run: cargo fuzz run --target x86_64-unknown-linux-gnu decrypt-blob -- -max_total_time=60
 
       - name: Upload crash artifacts
         if: failure()
