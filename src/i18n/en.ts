@@ -118,6 +118,8 @@ export const en: Dictionary = {
       "A quiet looping track, streamed from a file beside the application. Starts on unlock and stops on lock.",
     effectsVolume: "Effects volume",
     musicVolume: "Music volume",
+    mute: "Mute the music",
+    unmute: "Unmute the music",
   },
   demo: {
     banner: "Sample data \u00b7 no real vault is connected yet",

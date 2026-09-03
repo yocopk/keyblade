@@ -4,9 +4,9 @@
 import { createContext, useContext, useEffect, useMemo, useRef } from "react";
 
 import {
-  AudioEngine,
   DEFAULT_EFFECTS_VOLUME,
   DEFAULT_MUSIC_VOLUME,
+  getEngine,
   type EffectName,
 } from "../lib/audio";
 
@@ -49,60 +49,47 @@ interface AudioProviderProps {
 }
 
 /**
- * Owns the audio engine for the lifetime of the application.
+ * Connects the settings to the audio engine.
  *
- * The engine lives in a ref rather than in state: a sound is a side effect with
- * its own lifetime, and re-rendering a component must never restart one.
+ * The engine itself lives in the module, not here. This component only reflects
+ * settings into it and hands the rest of the tree a stable API — deliberately
+ * so, because tying an engine's lifetime to a component's is what produced an
+ * orphaned, uncontrollable audio element the last time round. See `lib/audio`.
  *
- * Settings are read through a ref too, so changing the volume does not tear down
- * and rebuild the engine — which for a fifty-minute stream would mean starting
- * the track again from the beginning every time the slider moves.
+ * Settings are read through a ref inside the callbacks, so changing the volume
+ * does not rebuild the API object and re-render every consumer.
  */
 export function AudioProvider({ settings, children }: AudioProviderProps) {
-  const engineRef = useRef<AudioEngine | null>(null);
   const settingsRef = useRef(settings);
   settingsRef.current = settings;
 
-  /**
-   * Returns a usable engine, building one if there is not one already.
-   *
-   * The "or disposed" half is load-bearing. StrictMode mounts, unmounts and
-   * mounts again, so the cleanup below runs on the first pass and disposes the
-   * engine — but the ref survives, and a disposed engine has an empty effects
-   * map and plays nothing. Recreating on demand makes the double invocation
-   * harmless, and covers any later unmount and remount for the same reason.
-   */
-  const engine = (): AudioEngine => {
-    if (engineRef.current === null || engineRef.current.isDisposed()) {
-      engineRef.current = new AudioEngine();
-      engineRef.current.setEffectsVolume(settingsRef.current.effectsVolume);
-      engineRef.current.setMusicVolume(settingsRef.current.musicVolume);
-    }
-    return engineRef.current;
-  };
-
+  // Decode the effects once, as early as there is a document to do it in.
   useEffect(() => {
-    return () => engineRef.current?.dispose();
+    getEngine().init();
   }, []);
 
   useEffect(() => {
-    engineRef.current?.setEffectsVolume(settings.effectsVolume);
-    engineRef.current?.setMusicVolume(settings.musicVolume);
-  }, [settings.effectsVolume, settings.musicVolume]);
+    getEngine().setEffectsVolume(settings.effectsVolume);
+  }, [settings.effectsVolume]);
 
   useEffect(() => {
-    if (!settings.music) engineRef.current?.stopMusic();
+    getEngine().setMusicVolume(settings.musicVolume);
+  }, [settings.musicVolume]);
+
+  useEffect(() => {
+    if (settings.music) void getEngine().startMusic();
+    else getEngine().stopMusic();
   }, [settings.music]);
 
   const api = useMemo<AudioApi>(
     () => ({
       play: (name) => {
-        if (settingsRef.current.effects) engine().play(name);
+        if (settingsRef.current.effects) getEngine().play(name);
       },
       startMusic: () => {
-        if (settingsRef.current.music) void engine().startMusic();
+        if (settingsRef.current.music) void getEngine().startMusic();
       },
-      pauseMusic: () => engineRef.current?.pauseMusic(),
+      pauseMusic: () => getEngine().pauseMusic(),
     }),
     [],
   );

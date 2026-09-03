@@ -1,0 +1,113 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+
+.dock {
+  position: fixed;
+  right: var(--space-5);
+  bottom: var(--space-5);
+  /* Above the vault chrome and the lock screen, below a modal backdrop, which
+     is at 9: while a dialog is open the control should not be reachable. */
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: 38px;
+  padding: 0 var(--space-2);
+  background: rgba(10, 17, 34, 0.86);
+  backdrop-filter: blur(6px);
+  border: 1px solid var(--edge-gold-faint);
+  border-radius: var(--radius-pill);
+  transition:
+    border-color var(--duration-fast) ease,
+    background-color var(--duration-fast) ease;
+}
+
+.dock:hover,
+.dock:focus-within {
+  border-color: var(--edge-gold-strong);
+  background: rgba(10, 17, 34, 0.96);
+}
+
+.toggle {
+  width: 28px;
+  height: 28px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 50%;
+  color: var(--gold);
+  transition: color var(--duration-fast) ease;
+}
+
+.toggle:hover {
+  color: var(--radiance);
+}
+
+.muted {
+  color: var(--faint);
+}
+
+/*
+  The slider is collapsed until the control is hovered or focused, so the dock
+  stays a small button most of the time and still holds a real slider rather
+  than a popover that has to be opened, aimed at, and dismissed.
+
+  Width and opacity only: no display toggling, so the slider stays in the tab
+  order and a keyboard user reaches it by tabbing, at which point focus-within
+  reveals it.
+*/
+.reveal {
+  width: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition:
+    width var(--duration-normal) var(--ease-out),
+    opacity var(--duration-fast) ease,
+    margin var(--duration-normal) var(--ease-out);
+}
+
+.dock:hover .reveal,
+.dock:focus-within .reveal {
+  width: 116px;
+  opacity: 1;
+  margin-right: var(--space-1);
+}
+
+.slider {
+  width: 100%;
+  height: 2px;
+  appearance: none;
+  background: rgba(147, 164, 198, 0.3);
+  border-radius: var(--radius-pill);
+  outline-offset: 6px;
+}
+
+.slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--gold);
+  border: 0;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--gold);
+  border: 0;
+  cursor: pointer;
+}
+
+.value {
+  flex: none;
+  min-width: 3.5ch;
+  text-align: right;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}

@@ -27,7 +27,7 @@ const ICONS = [
   "password", "payments", "person", "photo_library", "picture_as_pdf",
   "play_arrow", "play_circle", "priority_high", "router", "screenshot_monitor",
   "search", "search_off", "shield_lock", "sticky_note_2", "terminal", "timer",
-  "tune", "upload_file", "visibility", "visibility_off", "volume_up", "vpn_key", "wifi",
+  "tune", "upload_file", "visibility", "visibility_off", "volume_off", "volume_up", "vpn_key", "wifi",
 ];
 
 /** Pulls the `d` attributes out of an SVG, in document order. */
