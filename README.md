@@ -80,11 +80,17 @@ Pre-alpha, under active development.
 
 - [x] **M0** Cryptographic core: key hierarchy, Argon2id, STREAM, test vectors
 - [x] **M0.5** Application shell: Tauri 2 workspace, React frontend, design tokens
+- [x] **M3** Interface: the stained-glass lock screen and the command menu
 - [ ] **M1** Minimum vault: password CRUD, search, auto-lock, sealed clipboard
 - [ ] **M2** Files: import, image and PDF viewers, video player with seek, export
-- [ ] **M3** Interface: the stained-glass lock screen and the command menu
 - [ ] **M4** Recovery kit, Windows Hello, importers, encrypted backup
 - [ ] **M5** Reproducible build, signing, SBOM, 0.1.0
+
+The interface arrived before the vault, out of the intended order. It runs on
+sample data, labelled as such in the list header: nothing is stored, nothing is
+encrypted, and unlocking is a timer of roughly the length Argon2id actually
+takes. M1 replaces the data source; the components are built around the seams it
+needs. See [`docs/DESIGN-DECISIONS.md`](docs/DESIGN-DECISIONS.md).
 
 ## Building
 
