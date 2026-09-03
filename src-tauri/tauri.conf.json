@@ -36,12 +36,21 @@
         "base-uri": "'self'",
         "form-action": "'none'"
       },
-      "freezePrototype": true
+      "freezePrototype": true,
+      "assetProtocol": {
+        "enable": true,
+        "scope": [
+          "$RESOURCE/music/*"
+        ]
+      }
     }
   },
   "bundle": {
     "active": true,
-    "targets": ["nsis", "msi"],
+    "targets": [
+      "nsis",
+      "msi"
+    ],
     "publisher": "Andrea Marchese",
     "copyright": "Copyright (C) 2026 Andrea Marchese. Licensed under AGPL-3.0-only.",
     "shortDescription": "Offline encrypted vault",
@@ -52,6 +61,9 @@
       "icons/128x128.png",
       "icons/128x128@2x.png",
       "icons/icon.ico"
-    ]
+    ],
+    "resources": {
+      "../assets/music/kh-chill-playlist.mp3": "music/kh-chill-playlist.mp3"
+    }
   }
 }

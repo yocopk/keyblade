@@ -109,6 +109,16 @@ export const en: Dictionary = {
     noteCode: "prefers-reduced-motion",
     noteTail: "setting.",
   },
+  sound: {
+    section: "SOUND",
+    effects: "Sound effects",
+    effectsDesc: "Confirmations, navigation and panels opening.",
+    music: "Background music",
+    musicDesc:
+      "A quiet looping track, streamed from a file beside the application. Starts on unlock and stops on lock.",
+    effectsVolume: "Effects volume",
+    musicVolume: "Music volume",
+  },
   demo: {
     banner: "Sample data \u00b7 no real vault is connected yet",
   },

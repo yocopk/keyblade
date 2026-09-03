@@ -23,7 +23,13 @@ tauri-build = { version = "2", features = [] }
 # deliberately: it hands the web layer the ability to open arbitrary URLs and
 # files through the OS, which is precisely the capability a vault that claims to
 # never touch the network must not have.
-tauri = { version = "2", features = [] }
+#
+# protocol-asset is the one feature enabled, and only so the background music can
+# be streamed from a file beside the application instead of being embedded in the
+# binary. It is narrowed twice over: the assetProtocol scope in tauri.conf.json
+# and the capability in capabilities/default.json both restrict it to
+# $RESOURCE/music/*, so it reads that directory and nothing else.
+tauri = { version = "2", features = ["protocol-asset"] }
 
 keyblade-core = { workspace = true }
 

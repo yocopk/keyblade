@@ -22,12 +22,12 @@ const ICONS = [
   "autorenew", "badge", "block", "blur_on", "check", "close",
   "cloud_off", "content_copy", "cottage", "database", "deployed_code",
   "description", "directions_car", "dns", "enhanced_encryption", "face",
-  "fingerprint", "gavel", "grain", "image", "info", "key_vertical", "label", "list_alt",
-  "lock", "lock_open", "medical_services", "memory", "movie", "notes",
+  "fingerprint", "gavel", "graphic_eq", "grain", "image", "info", "key_vertical", "label", "list_alt",
+  "lock", "lock_open", "medical_services", "memory", "movie", "music_note", "notes",
   "password", "payments", "person", "photo_library", "picture_as_pdf",
   "play_arrow", "play_circle", "priority_high", "router", "screenshot_monitor",
   "search", "search_off", "shield_lock", "sticky_note_2", "terminal", "timer",
-  "tune", "upload_file", "visibility", "visibility_off", "vpn_key", "wifi",
+  "tune", "upload_file", "visibility", "visibility_off", "volume_up", "vpn_key", "wifi",
 ];
 
 /** Pulls the `d` attributes out of an SVG, in document order. */

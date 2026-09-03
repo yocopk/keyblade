@@ -137,9 +137,19 @@ able to install a modified build believing it is this one.
 ## Disclaimer
 
 Keyblade is an independent, unofficial project, not affiliated with, endorsed by or
-associated with Square Enix Holdings Co., Ltd. or The Walt Disney Company.
+associated with Square Enix Holdings Co., Ltd. or The Walt Disney Company. Every
+graphic is original work made for this project.
 
-No assets from the KINGDOM HEARTS series, including artwork, sprites, textures,
-fonts, audio, music, and character, world or weapon names, are included in or
-distributed with this software. Every graphic is original work made for this project.
-KINGDOM HEARTS and related marks belong to their respective owners.
+> [!IMPORTANT]
+> **The audio in this repository is not.** The sound effects and the music track
+> are believed to come from the KINGDOM HEARTS series and are included without a
+> licence from their rights holder. They are **not** covered by the AGPL grant —
+> this project cannot license what it does not own — so if you fork or
+> redistribute, that permission is yours to obtain or yours to do without.
+>
+> All of it is in `public/audio/` and `assets/music/`. Delete both and the
+> application runs silently with no code change. Rights holders: open an issue
+> and it comes down.
+
+KINGDOM HEARTS and related marks belong to their respective owners. See
+[`NOTICE`](NOTICE) for the full statement.

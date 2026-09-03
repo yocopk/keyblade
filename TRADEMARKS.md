@@ -45,8 +45,13 @@ should be able to install your build believing it is this one.
 ## Third-party marks
 
 "KINGDOM HEARTS" is a trademark of Square Enix Holdings Co., Ltd. This project is
-unofficial and unaffiliated; see the disclaimer in `NOTICE`. No assets from that
-series are included in or distributed with this software.
+unofficial and unaffiliated; see the disclaimer in `NOTICE`.
+
+No **graphics** from that series are included: every image in this project is
+original work. The **audio** is a different matter — it is third-party material
+included without a licence, it is excluded from the AGPL grant, and `NOTICE`
+sets out exactly which directories hold it and how to remove them. A fork that
+wants to be redistributable should start by deleting those two directories.
 
 ## Contact
 

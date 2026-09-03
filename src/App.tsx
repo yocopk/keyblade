@@ -6,6 +6,12 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import type { IconName } from "./components/Icon/Icon";
 import { CATEGORY_ICONS, SAMPLE_ITEMS, SAMPLE_VAULTS } from "./data/sampleVault";
 import { CATEGORY_IDS, FILE_CATEGORIES, type CategoryId, type VaultItem } from "./data/types";
+import {
+  AudioProvider,
+  DEFAULT_SOUND_SETTINGS,
+  useAudio,
+  type SoundSettings,
+} from "./hooks/useAudio";
 import { useAutoLock } from "./hooks/useAutoLock";
 import { useCopyTimer } from "./hooks/useCopyTimer";
 import { DEFAULT_LOCALE, LocaleContext, useTranslation, type Locale } from "./i18n";
@@ -29,6 +35,7 @@ const EMPTY_DRAFT: Draft = { name: "", first: "", second: "" };
 
 export function App() {
   const [locale] = useState<Locale>(DEFAULT_LOCALE);
+  const [sound, setSound] = useState<SoundSettings>(DEFAULT_SOUND_SETTINGS);
 
   // Keep the document language in step with the interface. Without this a
   // screen reader pronounces Italian copy with English phonetics, which is the
@@ -39,9 +46,16 @@ export function App() {
 
   return (
     <LocaleContext.Provider value={locale}>
-      <Keyblade />
+      <AudioProvider settings={sound}>
+        <Keyblade sound={sound} onSoundChange={setSound} />
+      </AudioProvider>
     </LocaleContext.Provider>
   );
+}
+
+interface KeybladeProps {
+  sound: SoundSettings;
+  onSoundChange: (next: SoundSettings) => void;
 }
 
 /**
@@ -53,8 +67,9 @@ export function App() {
  * so that wiring the real vault in replaces the data and leaves the components
  * untouched.
  */
-function Keyblade() {
+function Keyblade({ sound, onSoundChange }: KeybladeProps) {
   const { t, format } = useTranslation();
+  const audio = useAudio();
 
   const [locked, setLocked] = useState(true);
   const [deriving, setDeriving] = useState(false);
@@ -85,7 +100,9 @@ function Keyblade() {
     setRevealed(new Set());
     setComposing(false);
     copyTimer.reset();
-  }, [copyTimer]);
+    audio.play("back");
+    audio.pauseMusic();
+  }, [copyTimer, audio]);
 
   const { remaining, touch } = useAutoLock(lockSeconds, lock, !locked);
 
@@ -114,8 +131,12 @@ function Keyblade() {
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        if (composing) setComposing(false);
-        else lock();
+        if (composing) {
+          setComposing(false);
+          audio.play("back");
+        } else {
+          lock();
+        }
         return;
       }
       if (composing || showingSettings) return;
@@ -128,23 +149,29 @@ function Keyblade() {
         const next = (previous + step + visibleItems.length) % visibleItems.length;
         return next;
       });
+      audio.play("navigation");
       touch();
     };
 
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [locked, composing, showingSettings, visibleItems.length, lock, touch]);
+  }, [locked, composing, showingSettings, visibleItems.length, lock, touch, audio]);
 
   const unlock = useCallback(() => {
     setDeriving(true);
+    // The click that got here is also the gesture that lets the page make
+    // noise at all, so this is the earliest any sound can play.
+    audio.play("start");
+
     // Stands in for Argon2id. M1 replaces it with the real derivation, which
     // takes about this long by design.
     window.setTimeout(() => {
       setDeriving(false);
       setLocked(false);
+      audio.startMusic();
       touch();
     }, DERIVATION_MS);
-  }, [touch]);
+  }, [touch, audio]);
 
   const toggleReveal = useCallback(
     (key: string) => {
@@ -154,9 +181,10 @@ function Keyblade() {
         else next.add(key);
         return next;
       });
+      audio.play("confirm");
       touch();
     },
-    [touch],
+    [touch, audio],
   );
 
   const saveDraft = useCallback(() => {
@@ -186,8 +214,9 @@ function Keyblade() {
     setDraft(EMPTY_DRAFT);
     setSelectedIndex(0);
     setQuery("");
+    audio.play("confirm");
     touch();
-  }, [category, draft, t, touch]);
+  }, [category, draft, t, touch, audio]);
 
   if (locked) {
     return (
@@ -292,6 +321,7 @@ function Keyblade() {
         setPanel(next as PanelId);
         setSelectedIndex(0);
         setComposing(false);
+        audio.play("navigation");
         touch();
       }}
       categoryLabel={showingSettings ? t.categories.settings : t.categories[categoryKey(category!)]}
@@ -306,6 +336,7 @@ function Keyblade() {
       selectedIndex={safeIndex}
       onSelectItem={(index) => {
         setSelectedIndex(index);
+        audio.play("navigation");
         touch();
       }}
       query={query}
@@ -319,6 +350,7 @@ function Keyblade() {
           : () => {
               setDraft(EMPTY_DRAFT);
               setComposing(true);
+              audio.play("popup");
               touch();
             }
       }
@@ -333,6 +365,7 @@ function Keyblade() {
       copiedSeconds={copyTimer.secondsLeft}
       onCopy={(key) => {
         copyTimer.copy(key);
+        audio.play("confirm");
         touch();
       }}
       remaining={lockSeconds === 0 ? null : remaining}
@@ -345,6 +378,11 @@ function Keyblade() {
             settings={settings}
             onChange={(next) => {
               setSettings(next);
+              touch();
+            }}
+            sound={sound}
+            onSoundChange={(next) => {
+              onSoundChange(next);
               touch();
             }}
             lockSeconds={lockSeconds}
@@ -373,7 +411,10 @@ function Keyblade() {
                 name: previous.name === "" ? t.compose.hintVaultName : previous.name,
               }))
             }
-            onCancel={() => setComposing(false)}
+            onCancel={() => {
+              setComposing(false);
+              audio.play("back");
+            }}
             onSave={saveDraft}
             canSave={draft.name.trim() !== ""}
           />

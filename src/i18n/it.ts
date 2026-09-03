@@ -108,6 +108,16 @@ export const it = {
     noteCode: "prefers-reduced-motion",
     noteTail: "di Windows.",
   },
+  sound: {
+    section: "SUONO",
+    effects: "Effetti sonori",
+    effectsDesc: "Conferme, navigazione e apertura dei pannelli.",
+    music: "Musica di sottofondo",
+    musicDesc:
+      "Traccia in loop a volume basso, letta da un file accanto all'app. Parte allo sblocco e si ferma al blocco.",
+    effectsVolume: "Volume degli effetti",
+    musicVolume: "Volume della musica",
+  },
   demo: {
     banner: "Dati di esempio · nessun vault reale è ancora collegato",
   },

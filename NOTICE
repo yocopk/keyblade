@@ -51,10 +51,34 @@ Keyblade is an independent, unofficial project. It is not affiliated with,
 endorsed by, sponsored by or associated with Square Enix Holdings Co., Ltd.,
 The Walt Disney Company, or any of their subsidiaries or affiliates.
 
-No assets from the KINGDOM HEARTS series -- no artwork, sprites, textures,
-fonts, audio, music, character names, world names or weapon names -- are
-included in, distributed with, or reproduced by this software. All graphics are
-original work created for this project.
+All graphics are original work created for this project. No artwork, sprites,
+textures, fonts, character names, world names or weapon names from the KINGDOM
+HEARTS series are included in or reproduced by this software.
 
 "KINGDOM HEARTS" and all related marks are trademarks of their respective
 owners, used here only for nominative reference.
+
+---
+
+AUDIO -- READ THIS BEFORE REDISTRIBUTING
+
+This repository includes sound effects and one music track that are NOT original
+work and are NOT owned by the copyright holder of this software. They are
+believed to originate from the KINGDOM HEARTS series, and they are included
+WITHOUT a licence from their rights holder.
+
+They are therefore NOT covered by the AGPL-3.0 grant above. This project cannot
+license what it does not own, and nothing here grants anyone permission to copy,
+redistribute, or reuse those files. If you fork or redistribute this software,
+that permission is yours to obtain or yours to do without.
+
+Every affected file lives in exactly two directories:
+
+    public/audio/     five short interface sounds
+    assets/music/     one background track
+
+Deleting both removes all of it. The application detects their absence and runs
+silently; no code change is needed.
+
+If you hold the rights to this audio and want it removed, open an issue on the
+repository or contact the owner, and it will be taken down.
