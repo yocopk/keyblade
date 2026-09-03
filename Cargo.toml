@@ -1,0 +1,35 @@
+# Workspace root.
+#
+# keyblade-core is deliberately a separate crate from the Tauri application.
+# The core forbids unsafe code entirely, and that guarantee has to survive the
+# arrival of the Windows integration (Hello, DPAPI, capture exclusion), which
+# cannot be written without unsafe. Keeping them in one crate would mean
+# dropping the forbid, so the boundary is drawn before that code exists rather
+# than after.
+#
+# It also means the cryptographic core can be read, tested and audited on its
+# own, without a reviewer having to disentangle it from application plumbing.
+
+[workspace]
+resolver = "2"
+members = ["crates/keyblade-core", "src-tauri"]
+
+[workspace.package]
+version = "0.0.0"
+edition = "2021"
+rust-version = "1.82"
+license = "AGPL-3.0-only"
+repository = "https://github.com/yocopk/keyblade"
+authors = ["Andrea Marchese"]
+
+[workspace.dependencies]
+keyblade-core = { path = "crates/keyblade-core" }
+
+[profile.release]
+panic = "abort"
+lto = true
+codegen-units = 1
+strip = true
+
+[profile.test]
+opt-level = 2

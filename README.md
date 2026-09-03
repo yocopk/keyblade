@@ -79,6 +79,7 @@ Saying an application is offline is worth nothing. Four things make it checkable
 Pre-alpha, under active development.
 
 - [x] **M0** Cryptographic core: key hierarchy, Argon2id, STREAM, test vectors
+- [x] **M0.5** Application shell: Tauri 2 workspace, React frontend, design tokens
 - [ ] **M1** Minimum vault: password CRUD, search, auto-lock, sealed clipboard
 - [ ] **M2** Files: import, image and PDF viewers, video player with seek, export
 - [ ] **M3** Interface: the stained-glass lock screen and the command menu
@@ -95,12 +96,18 @@ pnpm install
 pnpm tauri dev
 ```
 
-Run the cryptographic test suite on its own:
+Run the whole Rust workspace, or just the cryptographic core:
 
 ```bash
-cd src-tauri
-cargo test
+cargo test --workspace
+cargo test -p keyblade-core
 ```
+
+The core is a separate crate from the application on purpose: it forbids unsafe
+code outright, and that guarantee has to survive the Windows integration
+(Hello, DPAPI, capture exclusion), which cannot be written without it. It also
+means the cryptography can be read and audited without untangling it from
+application plumbing.
 
 ## Contributing
 

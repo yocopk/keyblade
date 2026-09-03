@@ -1,8 +1,11 @@
-# Rust
-/src-tauri/target/
-/src-tauri/fuzz/target/
-/src-tauri/fuzz/corpus/
-/src-tauri/fuzz/artifacts/
+# Rust — matches at any depth, so a stray crate-local target never slips in
+target/
+/crates/keyblade-core/fuzz/target/
+/crates/keyblade-core/fuzz/corpus/
+/crates/keyblade-core/fuzz/artifacts/
+
+# Tauri generated schemas and capabilities
+/src-tauri/gen/
 
 # Node
 node_modules/

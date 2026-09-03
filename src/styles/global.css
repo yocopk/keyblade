@@ -1,0 +1,57 @@
+/* SPDX-License-Identifier: AGPL-3.0-only
+ * SPDX-FileCopyrightText: 2026 Andrea Marchese */
+
+@import "./tokens.css";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--void);
+  color: var(--radiance);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+
+  /* A vault is not a web page. Text selection and the context menu are opt-in
+     per element, and dragging the window by its content is not a thing. */
+  user-select: none;
+  -webkit-user-select: none;
+  overscroll-behavior: none;
+}
+
+/* Opt back in wherever content is meant to be read and copied. */
+[data-selectable],
+input,
+textarea {
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+:focus-visible {
+  outline: var(--border-accent) solid var(--gold);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* The command menu is driven by the keyboard, so focus must always be visible.
+   Removing the outline anywhere in this application is a bug, not a style. */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}

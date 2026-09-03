@@ -162,4 +162,4 @@ Recorded rather than hidden.
 
 This document changes when the architecture changes, when a milestone adds a
 capability, or when an audit says it is wrong. Every change to
-`src-tauri/src/crypto/` should be checked against it before merge.
+`crates/keyblade-core/src/crypto/` should be checked against it before merge.

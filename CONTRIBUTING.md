@@ -19,7 +19,7 @@ be an established crate. Composition is where this project exercises judgement;
 primitives are not.
 
 **Crypto changes need tests that fail before the fix.** A change to anything under
-`src-tauri/src/crypto/` is not reviewable without test vectors and, where applicable,
+`crates/keyblade-core/src/crypto/` is not reviewable without test vectors and, where applicable,
 negative tests proving that tampering is rejected.
 
 **Key material stays in Rust.** Nothing from the key hierarchy may cross the IPC

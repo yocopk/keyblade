@@ -23,7 +23,6 @@ jobs:
         with:
           tool: cargo-audit
       - name: cargo audit
-        working-directory: src-tauri
         run: cargo audit --deny warnings
 
   fuzz:
@@ -41,11 +40,11 @@ jobs:
       # A short run on every change. It will not find deep bugs, but it does
       # catch a regression that makes a malformed blob panic.
       - name: Fuzz the header parser
-        working-directory: src-tauri
+        working-directory: crates/keyblade-core
         run: cargo fuzz run --target x86_64-unknown-linux-gnu header-parse -- -max_total_time=60
 
       - name: Fuzz the decryption path
-        working-directory: src-tauri
+        working-directory: crates/keyblade-core
         run: cargo fuzz run --target x86_64-unknown-linux-gnu decrypt-blob -- -max_total_time=60
 
       - name: Upload crash artifacts
@@ -53,4 +52,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: fuzz-artifacts
-          path: src-tauri/fuzz/artifacts/
+          path: crates/keyblade-core/fuzz/artifacts/

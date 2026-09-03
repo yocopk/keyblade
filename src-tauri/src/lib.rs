@@ -1,45 +1,27 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // SPDX-FileCopyrightText: 2026 Andrea Marchese
 
-//! Cryptographic core for Keyblade.
+//! The Keyblade desktop application.
 //!
-//! This crate holds everything that touches a key. It has no knowledge of the
-//! user interface, no knowledge of Tauri, and deliberately no networking
-//! dependency of any kind.
+//! This crate is the application shell: window lifecycle, the IPC surface, and
+//! (from M1) the vault and Windows-specific hardening. Everything that touches a
+//! key lives in `keyblade-core`, which is a separate crate precisely so that it
+//! can keep `#![forbid(unsafe_code)]` once the Windows integration arrives here.
 //!
-//! # Design
+//! # The IPC boundary
 //!
-//! The master password never encrypts data. It derives a [`MasterKey`] which
-//! unwraps a randomly generated [`VaultKey`], and the vault key is what
-//! everything else descends from. That indirection is what makes it possible to
-//! change the master password, add Windows Hello, or revoke a recovery kit by
-//! rewriting 32 bytes instead of re-encrypting the archive.
-//!
-//! ```text
-//!   master password
-//!         | Argon2id (calibrated, parameters stored in the vault header)
-//!         v
-//!    MasterKey  --unwraps-->  VaultKey  --BLAKE3 derive_key-->  subkeys
-//! ```
-//!
-//! # What this crate does not do
-//!
-//! It does not invent primitives. Argon2id, XChaCha20-Poly1305 and BLAKE3 come
-//! from established crates, and the STREAM chunking construction comes from
-//! `aead::stream` rather than being written here. The judgement this crate
-//! exercises is in composition and in refusing to tolerate malformed input.
+//! Commands in [`ipc`] are the only surface the web layer can reach, and they
+//! are treated the way a public HTTP endpoint is treated: every input validated,
+//! no arbitrary filesystem paths accepted, and **no key material returned**. If
+//! the WebView is ever compromised, the attacker gets what is on screen, not the
+//! vault.
 
-#![forbid(unsafe_code)]
-#![warn(missing_docs)]
-#![warn(clippy::all)]
+pub mod ipc;
 
-pub mod crypto;
-
-pub use crypto::{
-    aead::{unwrap_key, wrap_key, WrappedKey, WRAPPED_KEY_LEN},
-    error::{CryptoError, Result},
-    kdf::{calibrate, derive_master_key, KdfParams, SALT_LEN},
-    key::Key32,
-    keyring::{MasterKey, VaultKey},
-    stream::{decrypt_stream, encrypt_stream, Header, CHUNK_SIZE, HEADER_LEN},
-};
+/// Builds and runs the application.
+pub fn run() {
+    tauri::Builder::default()
+        .invoke_handler(tauri::generate_handler![ipc::crypto_info])
+        .run(tauri::generate_context!())
+        .expect("Keyblade failed to start");
+}

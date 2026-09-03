@@ -1,0 +1,92 @@
+/* SPDX-License-Identifier: AGPL-3.0-only
+ * SPDX-FileCopyrightText: 2026 Andrea Marchese
+ *
+ * Design tokens.
+ *
+ * These are the project's values. Anything imported from a design maps ONTO
+ * them; raw hex, px and font names do not enter component code. A design that
+ * introduces a value with no equivalent here gets a new token added to this
+ * file, named to match, rather than an inline literal somewhere.
+ *
+ * The application is deliberately single-theme. It is a dark product: the lock
+ * screen is a lit window on a black ground, and a light variant would not be
+ * the same design rather than the same design inverted.
+ */
+
+:root {
+  color-scheme: dark;
+
+  /* ── Surfaces ─────────────────────────────────────────────── */
+  --void: #080b14; /* the ground behind everything */
+  --abyss: #0e1628; /* panels, raised surfaces */
+  --glass: #17233f; /* menu boxes, selected rows */
+  --edge: #23345a; /* borders, dividers */
+
+  /* ── Ink ──────────────────────────────────────────────────── */
+  --radiance: #f3eddf; /* primary text, warm off-white */
+  --muted: #93a4c6; /* secondary text */
+  --faint: #64769b; /* captions, disabled */
+
+  /* ── Accent ───────────────────────────────────────────────── */
+  --gold: #e8c170; /* borders, the menu cursor, focus */
+  --gold-dim: #a98235; /* accent at rest */
+
+  /* ── Semantic ─────────────────────────────────────────────── */
+  /* Kept separate from the accent on purpose: gold must never be read as
+     "warning", or the interface loses its only alarm colour. */
+  --danger: #e8705c;
+  --safe: #63c79b;
+  --caution: #e8b04a;
+
+  /* ── Type ─────────────────────────────────────────────────── */
+  /* Self-hosted, never from a CDN: a font request is a network request, and
+     this application makes none. Files land in src/assets/fonts. */
+  --font-display: "Marcellus", Georgia, "Times New Roman", serif;
+  --font-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", "Cascadia Mono", Consolas, monospace;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 2rem;
+  --text-display: clamp(2.5rem, 1.5rem + 3vw, 4rem);
+
+  /* ── Space ────────────────────────────────────────────────── */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+
+  /* ── Shape ────────────────────────────────────────────────── */
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+  --border-hairline: 1px;
+  --border-accent: 2px;
+
+  /* ── Motion ───────────────────────────────────────────────── */
+  --duration-fast: 120ms;
+  --duration-normal: 220ms;
+  --duration-slow: 480ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* ── Layout ───────────────────────────────────────────────── */
+  --sidebar-width: 260px;
+  --hud-height: 56px;
+}
+
+/* Motion is decoration here, never information: nothing is only communicated by
+   movement, so switching it off costs the user nothing. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 1ms;
+    --duration-normal: 1ms;
+    --duration-slow: 1ms;
+  }
+}
