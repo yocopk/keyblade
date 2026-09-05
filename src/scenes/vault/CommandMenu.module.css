@@ -43,7 +43,6 @@
 
 .cursor {
   display: block;
-  animation: kb-bob 1.9s ease-in-out infinite;
 }
 
 .label {

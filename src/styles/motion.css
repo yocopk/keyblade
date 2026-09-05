@@ -10,6 +10,24 @@
  * Two switches turn them off: the user's own setting, honoured through
  * prefers-reduced-motion, and the in-app Animations toggle, which sets
  * data-motion="off" on the application root.
+ *
+ * # Why the declarations live here and not beside the components
+ *
+ * They have to. CSS Modules rewrites `animation-name` inside a `.module.css` to
+ * a locally scoped name — `kb-flash` became `_kb-flash_1ssl0_1` — and the
+ * keyframes it points at are declared globally, in this file. The scoped name
+ * matched nothing, so the animation silently never ran.
+ *
+ * Every animation in the project was declared that way, and every one of them
+ * was dead: the lock screen entrance, the derivation flash, the menu cursor, the
+ * button sweep, the modal, the panels. Nothing had ever moved.
+ *
+ * `:global(kb-flash)` is the documented escape and PostCSS rejects it here, in
+ * the shorthand and in the longhand alike. So the declarations are attached to a
+ * `data-anim` attribute instead: attributes are not scoped, this file keeps both
+ * halves of every animation in one place, and a component opts in with one
+ * attribute. Anything tunable per instance comes through a custom property,
+ * which CSS Modules also leaves alone.
  */
 
 @keyframes kb-rise {
@@ -20,6 +38,27 @@
   to {
     opacity: 1;
     transform: none;
+  }
+}
+
+/* The hero's arrival: the window settles into place rather than sliding in. */
+@keyframes kb-glass-in {
+  from {
+    opacity: 0;
+    transform: scale(0.82);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes kb-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 
@@ -91,17 +130,27 @@
   }
 }
 
-@keyframes kb-flash {
+/*
+  A ring of light leaving the stained glass, once per pulse.
+
+  It replaces a full-screen white flash that did nothing for the first 770ms of
+  the derivation and then washed out the wordmark and the whole lock screen in
+  the last 200. This starts at the rim of the glass and travels outward, and it
+  repeats for as long as the key is deriving, so the wait reads as the vault
+  working rather than as a screen that froze and then banged.
+
+  Scale and opacity only, so it costs the compositor nothing.
+*/
+@keyframes kb-wave {
   0% {
+    transform: scale(1);
     opacity: 0;
   }
-  70% {
-    opacity: 0;
-  }
-  88% {
-    opacity: 0.85;
+  12% {
+    opacity: 0.9;
   }
   100% {
+    transform: scale(2.15);
     opacity: 0;
   }
 }
@@ -121,4 +170,81 @@
     animation: none !important;
     transition: none !important;
   }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Declarations. A component opts in with data-anim="…" and may set
+   --anim-delay, or the duration variable a few of these read.
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* Entrances. Each ends at the element's resting state, so switching animation
+   off leaves the element exactly where it belongs. */
+[data-anim="glass-in"] {
+  animation: kb-glass-in 1.1s var(--ease-out) var(--anim-delay, 0s) both;
+}
+
+[data-anim="rise"] {
+  animation: kb-rise 0.7s var(--ease-out) var(--anim-delay, 0s) both;
+}
+
+[data-anim="modal-in"] {
+  animation: kb-rise 0.28s ease both;
+}
+
+[data-anim="slide-in"] {
+  animation: kb-slide-in 0.3s ease both;
+}
+
+/*
+  The expanding ring. Its resting state is invisible, so it carries its own
+  `opacity: 0`: an element that only exists while it animates must not be visible
+  when the animation is switched off, or turning motion off turns it permanently
+  on — which is exactly what the flash it replaced used to do.
+
+  Two of these are rendered with staggered delays, so the ring leaving the glass
+  is followed by another before it has faded.
+*/
+[data-anim="wave"] {
+  opacity: 0;
+  border: 1px solid rgba(232, 193, 112, 0.5);
+  background: radial-gradient(
+    circle closest-side,
+    transparent 58%,
+    rgba(232, 193, 112, 0.14) 84%,
+    transparent 100%
+  );
+  animation: kb-wave 1.15s var(--ease-out) var(--wave-delay, 0s) infinite;
+}
+
+/* Ambient loops. The fade is listed first and the loop second, so the loop wins
+   the property once its delay expires. */
+[data-anim="aura"] {
+  animation:
+    kb-fade-in 1.4s ease 0.15s both,
+    kb-glow 7s ease-in-out 1.6s infinite;
+}
+
+[data-anim="halo"] {
+  animation:
+    kb-fade-in 0.9s ease 0.6s both,
+    kb-halo 6s ease-in-out 1.5s infinite;
+}
+
+/* kb-spin only touches transform, so the fade runs alongside it. */
+[data-anim="halo-spin"] {
+  animation:
+    kb-fade-in 0.9s ease 0.6s both,
+    kb-spin 150s linear infinite;
+}
+
+[data-anim="bob"] {
+  animation: kb-bob 1.9s ease-in-out infinite;
+}
+
+[data-anim="sweep"] {
+  animation: kb-sweep var(--sweep-duration, 4.6s) ease-in-out infinite;
+}
+
+[data-anim="fill"] {
+  animation: kb-fill var(--derive-duration, 1.05s) linear both;
 }

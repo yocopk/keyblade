@@ -19,7 +19,6 @@
   border: 1px solid rgba(232, 193, 112, 0.34);
   border-radius: var(--radius-sm);
   box-shadow: 0 40px 120px rgba(0, 0, 0, 0.7);
-  animation: kb-rise 0.28s ease both;
 }
 
 .header {

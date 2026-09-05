@@ -6,6 +6,5 @@
   bottom: 0;
   width: var(--sweep-width, 34%);
   background: linear-gradient(90deg, transparent, rgba(243, 237, 223, var(--sweep-strength, 0.2)), transparent);
-  animation: kb-sweep var(--sweep-duration, 4.6s) ease-in-out infinite;
   pointer-events: none;
 }
