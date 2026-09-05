@@ -68,14 +68,28 @@ export function LockScene({
     <div className={styles.scene}>
       <div aria-hidden data-anim="aura" className={styles.aura} />
       <ParticleField enabled={particles} animated={animations} count={54} bursting={deriving} />
-      {deriving && <div aria-hidden data-anim="flash" className={styles.flash} />}
-
       <div className={styles.stack}>
         <div data-anim="glass-in" className={styles.glassFrame}>
           {halo && (
             <>
               <span aria-hidden data-anim="halo" className={styles.haloInner} />
               <span aria-hidden data-anim="halo-spin" className={styles.haloOuter} />
+            </>
+          )}
+          {/*
+            Rings leaving the glass while the key derives. Anchored inside the
+            frame rather than positioned against the viewport, so they start at
+            the rim of the rosette whatever size it has been given.
+          */}
+          {deriving && (
+            <>
+              <span aria-hidden data-anim="wave" className={styles.wave} />
+              <span
+                aria-hidden
+                data-anim="wave"
+                className={styles.wave}
+                style={{ "--wave-delay": "575ms" } as React.CSSProperties}
+              />
             </>
           )}
           <StainedGlass

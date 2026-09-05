@@ -24,17 +24,11 @@
   background: radial-gradient(46% 34% at 50% 44%, rgba(232, 193, 112, 0.11), transparent 70%);
 }
 
-.flash {
+.wave {
   position: absolute;
   inset: 0;
-  z-index: 3;
+  border-radius: 50%;
   pointer-events: none;
-  background: radial-gradient(
-    60% 50% at 50% 44%,
-    rgba(243, 237, 223, 0.9),
-    rgba(232, 193, 112, 0.35) 45%,
-    transparent 75%
-  );
 }
 
 .stack {
