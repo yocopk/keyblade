@@ -10,6 +10,24 @@
  * Two switches turn them off: the user's own setting, honoured through
  * prefers-reduced-motion, and the in-app Animations toggle, which sets
  * data-motion="off" on the application root.
+ *
+ * # Why the declarations live here and not beside the components
+ *
+ * They have to. CSS Modules rewrites `animation-name` inside a `.module.css` to
+ * a locally scoped name — `kb-flash` became `_kb-flash_1ssl0_1` — and the
+ * keyframes it points at are declared globally, in this file. The scoped name
+ * matched nothing, so the animation silently never ran.
+ *
+ * Every animation in the project was declared that way, and every one of them
+ * was dead: the lock screen entrance, the derivation flash, the menu cursor, the
+ * button sweep, the modal, the panels. Nothing had ever moved.
+ *
+ * `:global(kb-flash)` is the documented escape and PostCSS rejects it here, in
+ * the shorthand and in the longhand alike. So the declarations are attached to a
+ * `data-anim` attribute instead: attributes are not scoped, this file keeps both
+ * halves of every animation in one place, and a component opts in with one
+ * attribute. Anything tunable per instance comes through a custom property,
+ * which CSS Modules also leaves alone.
  */
 
 @keyframes kb-rise {
@@ -142,4 +160,72 @@
     animation: none !important;
     transition: none !important;
   }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Declarations. A component opts in with data-anim="…" and may set
+   --anim-delay, or the duration variable a few of these read.
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* Entrances. Each ends at the element's resting state, so switching animation
+   off leaves the element exactly where it belongs. */
+[data-anim="glass-in"] {
+  animation: kb-glass-in 1.1s var(--ease-out) var(--anim-delay, 0s) both;
+}
+
+[data-anim="rise"] {
+  animation: kb-rise 0.7s var(--ease-out) var(--anim-delay, 0s) both;
+}
+
+[data-anim="modal-in"] {
+  animation: kb-rise 0.28s ease both;
+}
+
+[data-anim="slide-in"] {
+  animation: kb-slide-in 0.3s ease both;
+}
+
+/*
+  The derivation flash is the one animation whose resting state is invisible, so
+  it carries opacity: 0 of its own. It used to rely on the keyframes to keep it
+  hidden, which meant that with the animation not running it sat at full
+  brightness for the whole derivation — a white-out over the lock screen rather
+  than a flash at the end of it.
+*/
+[data-anim="flash"] {
+  opacity: 0;
+  animation: kb-flash 1.1s ease-in both;
+}
+
+/* Ambient loops. The fade is listed first and the loop second, so the loop wins
+   the property once its delay expires. */
+[data-anim="aura"] {
+  animation:
+    kb-fade-in 1.4s ease 0.15s both,
+    kb-glow 7s ease-in-out 1.6s infinite;
+}
+
+[data-anim="halo"] {
+  animation:
+    kb-fade-in 0.9s ease 0.6s both,
+    kb-halo 6s ease-in-out 1.5s infinite;
+}
+
+/* kb-spin only touches transform, so the fade runs alongside it. */
+[data-anim="halo-spin"] {
+  animation:
+    kb-fade-in 0.9s ease 0.6s both,
+    kb-spin 150s linear infinite;
+}
+
+[data-anim="bob"] {
+  animation: kb-bob 1.9s ease-in-out infinite;
+}
+
+[data-anim="sweep"] {
+  animation: kb-sweep var(--sweep-duration, 4.6s) ease-in-out infinite;
+}
+
+[data-anim="fill"] {
+  animation: kb-fill var(--derive-duration, 1.05s) linear both;
 }

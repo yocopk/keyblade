@@ -103,6 +103,16 @@ function Keyblade({ sound, onSoundChange }: KeybladeProps) {
   const copyTimer = useCopyTimer();
   const vault = SAMPLE_VAULTS[vaultIndex];
 
+  // The Animations switch reaches the CSS from here.
+  //
+  // motion.css has always carried the `[data-motion="off"]` rule, but nothing
+  // ever set the attribute, so the switch moved the particle field and left
+  // every CSS animation running. Set on the document element rather than a
+  // wrapper so it also covers the fixed-position music control.
+  useEffect(() => {
+    document.documentElement.dataset.motion = settings.animations ? "on" : "off";
+  }, [settings.animations]);
+
   const showingSettings = panel === SETTINGS_PANEL;
   const category = showingSettings ? null : (panel as CategoryId);
 
