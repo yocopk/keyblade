@@ -27,7 +27,7 @@
 @keyframes kb-glass-in {
   from {
     opacity: 0;
-    transform: scale(0.9);
+    transform: scale(0.82);
   }
   to {
     opacity: 1;

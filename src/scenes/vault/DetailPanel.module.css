@@ -8,6 +8,22 @@
   position: relative;
 }
 
+/*
+  A clipping layer for the corner sigil.
+
+  The sigil is deliberately bled off the bottom-right corner, but a child
+  positioned past the edge of an `overflow: auto` box is scrollable overflow, not
+  decoration: the panel gained 120px of horizontal scroll and 110px of vertical,
+  exactly the negative offsets below. Clipping it in its own layer keeps the
+  bleed and gives the panel back to its content.
+*/
+.watermarkLayer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
 .watermark {
   position: absolute;
   right: -120px;

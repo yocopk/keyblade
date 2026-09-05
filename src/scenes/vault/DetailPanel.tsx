@@ -44,7 +44,9 @@ export function DetailPanel({
 
   return (
     <div className={styles.panel}>
-      <StainedGlass salt={vaultSalt} size={420} className={styles.watermark} />
+      <div className={styles.watermarkLayer}>
+        <StainedGlass salt={vaultSalt} size={420} className={styles.watermark} />
+      </div>
 
       {item !== undefined && (
         <div className={styles.content}>
