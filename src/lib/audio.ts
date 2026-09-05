@@ -98,6 +98,8 @@ class Engine {
   private effectsVolume = DEFAULT_EFFECTS_VOLUME;
   private musicVolume = DEFAULT_MUSIC_VOLUME;
   private gestureArmed = false;
+  /** In-flight start, so concurrent callers share one attempt. See startMusic. */
+  private starting: Promise<void> | null = null;
 
   /** Decodes every effect once. Idempotent; safe to call from an effect body. */
   init(): void {
@@ -162,12 +164,45 @@ class Engine {
     if (this.music !== null) this.music.volume = this.musicVolume;
   }
 
-  /** Starts the music, looping. Safe to call repeatedly. */
+  /**
+   * Starts the music, looping. Safe to call repeatedly and concurrently.
+   *
+   * The concurrency guard is the whole point of this method's shape. The naive
+   * version checked `this.music === null` and then awaited the URL before
+   * assigning it — a check-then-act race. Two callers both passed the check,
+   * both built an element, and the second overwrote the first, which went on
+   * playing with nothing referencing it. Every control then moved an object the
+   * user could not hear.
+   *
+   * It never showed up in a browser, where resolving the URL settles in a
+   * microtask. Under Tauri the same call is two dynamic imports and an IPC round
+   * trip, so the window is wide and the bug is the normal case: music that plays
+   * and cannot be paused.
+   *
+   * Sharing one in-flight promise closes it. Callers after it settles start a
+   * fresh attempt, which is what resuming needs.
+   */
   async startMusic(): Promise<void> {
     this.musicWanted = true;
+    this.starting ??= this.beginMusic().finally(() => {
+      this.starting = null;
+    });
+    return this.starting;
+  }
 
+  private async beginMusic(): Promise<void> {
     if (this.music === null) {
-      const url = await resolveMusicUrl();
+      let url: string;
+      try {
+        url = await resolveMusicUrl();
+      } catch {
+        // Under Tauri this is an IPC call and it can fail — a missing resource,
+        // a scope that does not cover it. Rejecting here would surface as an
+        // unhandled rejection in a caller that only ever says `void`, so the
+        // failure stays local and the application simply runs without music.
+        return;
+      }
+
       // The wish may have been withdrawn while the URL was resolving.
       if (!this.musicWanted) return;
 
@@ -189,25 +224,15 @@ class Engine {
     }
   }
 
-  /** Stops the music and rewinds. */
-  stopMusic(): void {
-    this.musicWanted = false;
-    if (this.music === null) return;
-    this.music.pause();
-    this.music.currentTime = 0;
-  }
-
   /**
-   * Pauses without rewinding.
+   * Pauses, keeping the position.
    *
-   * No caller yet: the music deliberately keeps playing when the vault locks,
-   * because it starts on the lock screen and belongs to the application rather
-   * than to the unlocked session.
+   * Deliberately not a rewind. Switching the music off and on again is something
+   * a person does casually, and on a fifty-minute track restarting from zero
+   * means only ever hearing the first few minutes of it.
    *
-   * It stays because M1 needs it. When the Windows session locks or the machine
-   * suspends the user has walked away, and a vault that keeps playing to an
-   * empty room is a bug. That hook cannot be written until the application
-   * process can subscribe to those events.
+   * M1 calls this again for the Windows session lock and for suspend: the user
+   * has walked away, and a vault that keeps playing to an empty room is a bug.
    */
   pauseMusic(): void {
     this.musicWanted = false;

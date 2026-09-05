@@ -78,7 +78,7 @@ export function AudioProvider({ settings, children }: AudioProviderProps) {
 
   useEffect(() => {
     if (settings.music) void getEngine().startMusic();
-    else getEngine().stopMusic();
+    else getEngine().pauseMusic();
   }, [settings.music]);
 
   const api = useMemo<AudioApi>(

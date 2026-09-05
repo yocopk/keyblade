@@ -103,12 +103,6 @@ function Keyblade({ sound, onSoundChange }: KeybladeProps) {
   const copyTimer = useCopyTimer();
   const vault = SAMPLE_VAULTS[vaultIndex];
 
-  // The music belongs to the application, not to the unlocked vault: it starts
-  // with the lock screen and keeps playing across locking. Where the platform
-  // refuses to autoplay, the engine waits for the first gesture and starts then.
-  useEffect(() => {
-    audio.startMusic();
-  }, [audio]);
   const showingSettings = panel === SETTINGS_PANEL;
   const category = showingSettings ? null : (panel as CategoryId);
 
