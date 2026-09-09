@@ -117,6 +117,8 @@ export const it = {
       "Traccia in loop a volume basso, letta da un file accanto all'app. Parte allo sblocco e si ferma al blocco.",
     effectsVolume: "Volume degli effetti",
     musicVolume: "Volume della musica",
+    mute: "Silenzia la musica",
+    unmute: "Riattiva la musica",
   },
   demo: {
     banner: "Dati di esempio · nessun vault reale è ancora collegato",

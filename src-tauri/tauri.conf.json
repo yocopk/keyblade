@@ -13,13 +13,14 @@
     "windows": [
       {
         "title": "Keyblade",
-        "width": 1180,
-        "height": 780,
+        "width": 1320,
+        "height": 880,
         "minWidth": 1024,
-        "minHeight": 620,
+        "minHeight": 680,
         "resizable": true,
         "center": true,
-        "theme": "Dark"
+        "theme": "Dark",
+        "additionalBrowserArgs": "--autoplay-policy=no-user-gesture-required --disable-features=msWebOOUI,msPdfOOUI,msSmartScreenProtection"
       }
     ],
     "security": {

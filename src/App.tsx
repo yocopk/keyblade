@@ -4,6 +4,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import type { IconName } from "./components/Icon/Icon";
+import { MusicControl } from "./components/MusicControl/MusicControl";
 import { CATEGORY_ICONS, SAMPLE_ITEMS, SAMPLE_VAULTS } from "./data/sampleVault";
 import { CATEGORY_IDS, FILE_CATEGORIES, type CategoryId, type VaultItem } from "./data/types";
 import {
@@ -48,6 +49,16 @@ export function App() {
     <LocaleContext.Provider value={locale}>
       <AudioProvider settings={sound}>
         <Keyblade sound={sound} onSoundChange={setSound} />
+        {/*
+          Outside both scenes on purpose: the music plays from the lock screen
+          onwards, so the way to turn it down has to survive locking too.
+        */}
+        <MusicControl
+          enabled={sound.music}
+          onEnabledChange={(next) => setSound((previous) => ({ ...previous, music: next }))}
+          volume={sound.musicVolume}
+          onVolumeChange={(next) => setSound((previous) => ({ ...previous, musicVolume: next }))}
+        />
       </AudioProvider>
     </LocaleContext.Provider>
   );
@@ -91,6 +102,17 @@ function Keyblade({ sound, onSoundChange }: KeybladeProps) {
 
   const copyTimer = useCopyTimer();
   const vault = SAMPLE_VAULTS[vaultIndex];
+
+  // The Animations switch reaches the CSS from here.
+  //
+  // motion.css has always carried the `[data-motion="off"]` rule, but nothing
+  // ever set the attribute, so the switch moved the particle field and left
+  // every CSS animation running. Set on the document element rather than a
+  // wrapper so it also covers the fixed-position music control.
+  useEffect(() => {
+    document.documentElement.dataset.motion = settings.animations ? "on" : "off";
+  }, [settings.animations]);
+
   const showingSettings = panel === SETTINGS_PANEL;
   const category = showingSettings ? null : (panel as CategoryId);
 
@@ -101,7 +123,6 @@ function Keyblade({ sound, onSoundChange }: KeybladeProps) {
     setComposing(false);
     copyTimer.reset();
     audio.play("back");
-    audio.pauseMusic();
   }, [copyTimer, audio]);
 
   const { remaining, touch } = useAutoLock(lockSeconds, lock, !locked);
@@ -168,7 +189,6 @@ function Keyblade({ sound, onSoundChange }: KeybladeProps) {
     window.setTimeout(() => {
       setDeriving(false);
       setLocked(false);
-      audio.startMusic();
       touch();
     }, DERIVATION_MS);
   }, [touch, audio]);

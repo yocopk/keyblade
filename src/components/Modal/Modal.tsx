@@ -74,6 +74,7 @@ export function Modal({ title, icon, onClose, closeLabel, children, footer }: Mo
         ref={panelRef}
         role="dialog"
         aria-modal="true"
+        data-anim="modal-in"
         aria-labelledby={titleId}
         className={styles.panel}
       >

@@ -34,6 +34,7 @@ export function DerivationProgress({ parameters, durationMs }: DerivationProgres
       </EyebrowLabel>
       <div className={styles.track}>
         <div
+          data-anim="fill"
           className={styles.bar}
           style={{ "--derive-duration": `${durationMs}ms` } as React.CSSProperties}
         />

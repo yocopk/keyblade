@@ -44,10 +44,12 @@ export function DetailPanel({
 
   return (
     <div className={styles.panel}>
-      <StainedGlass salt={vaultSalt} size={420} className={styles.watermark} />
+      <div className={styles.watermarkLayer}>
+        <StainedGlass salt={vaultSalt} size={420} className={styles.watermark} />
+      </div>
 
       {item !== undefined && (
-        <div className={styles.content}>
+        <div data-anim="slide-in" className={styles.content}>
           <div className={styles.heading}>
             <EyebrowLabel icon={item.isFile ? "lock" : "list_alt"} tone="gold">
               {item.isFile ? t.detail.kindBlob : t.detail.kindIndex}

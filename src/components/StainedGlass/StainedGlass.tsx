@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // SPDX-FileCopyrightText: 2026 Andrea Marchese
 
-import { useEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 
 import { drawStainedGlass, type GlassPalette } from "./draw";
 
@@ -41,7 +41,16 @@ interface StainedGlassProps {
 export function StainedGlass({ salt, size, rings, label, className, style }: StainedGlassProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  useEffect(() => {
+  // useLayoutEffect, not useEffect, and the difference is visible.
+  //
+  // useEffect runs after the browser has painted, so the canvas was empty for
+  // the first frames of the lock screen's entrance animation. What you saw was
+  // an empty circle fading in, and then the window appearing all at once,
+  // already at full size, part-way through — which reads as no animation at all.
+  //
+  // Running before paint means the glass exists on frame one and actually
+  // performs the entrance it was given.
+  useLayoutEffect(() => {
     const canvas = canvasRef.current;
     if (canvas === null) return;
     drawStainedGlass(canvas, { salt, size, rings, palette: PALETTE });

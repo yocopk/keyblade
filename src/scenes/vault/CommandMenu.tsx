@@ -57,7 +57,7 @@ export function CommandMenu<T extends string>({
                 <Sweep width="40%" strength={0.14} duration="5.2s" />
               </>
             )}
-            <span aria-hidden className={styles.cursorSlot}>
+            <span aria-hidden data-anim={active ? "bob" : undefined} className={styles.cursorSlot}>
               {active && <Icon name="play_arrow" size={14} className={styles.cursor} />}
             </span>
             <Icon name={entry.icon} size={19} color="var(--ice)" className={styles.icon} />

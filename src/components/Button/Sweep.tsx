@@ -20,6 +20,7 @@ export function Sweep({ width, strength, duration }: SweepProps) {
   return (
     <span
       aria-hidden
+      data-anim="sweep"
       className={styles.sweep}
       style={
         {

@@ -66,16 +66,30 @@ export function LockScene({
 
   return (
     <div className={styles.scene}>
-      <div aria-hidden className={styles.aura} />
+      <div aria-hidden data-anim="aura" className={styles.aura} />
       <ParticleField enabled={particles} animated={animations} count={54} bursting={deriving} />
-      {deriving && <div aria-hidden className={styles.flash} />}
-
       <div className={styles.stack}>
-        <div className={styles.glassFrame}>
+        <div data-anim="glass-in" className={styles.glassFrame}>
           {halo && (
             <>
-              <span aria-hidden className={styles.haloInner} />
-              <span aria-hidden className={styles.haloOuter} />
+              <span aria-hidden data-anim="halo" className={styles.haloInner} />
+              <span aria-hidden data-anim="halo-spin" className={styles.haloOuter} />
+            </>
+          )}
+          {/*
+            Rings leaving the glass while the key derives. Anchored inside the
+            frame rather than positioned against the viewport, so they start at
+            the rim of the rosette whatever size it has been given.
+          */}
+          {deriving && (
+            <>
+              <span aria-hidden data-anim="wave" className={styles.wave} />
+              <span
+                aria-hidden
+                data-anim="wave"
+                className={styles.wave}
+                style={{ "--wave-delay": "575ms" } as React.CSSProperties}
+              />
             </>
           )}
           <StainedGlass
@@ -87,7 +101,7 @@ export function LockScene({
           />
         </div>
 
-        <div className={styles.identity}>
+        <div data-anim="rise" className={styles.identity}>
           <EyebrowLabel icon="shield_lock" tone="gold" size="sm">
             {t.lock.eyebrow}
           </EyebrowLabel>
@@ -98,7 +112,7 @@ export function LockScene({
           </div>
         </div>
 
-        <div className={styles.form}>
+        <div data-anim="rise" className={styles.form}>
           {deriving ? (
             <DerivationProgress
               parameters="argon2id · m=512 MiB · t=3 · p=4"
@@ -148,7 +162,7 @@ export function LockScene({
           <div className={styles.hint}>{deriving ? "" : t.lock.hint}</div>
         </div>
 
-        <div className={styles.switcher}>
+        <div data-anim="rise" className={styles.switcher}>
           <EyebrowLabel icon="deployed_code">{t.lock.sigilCaption}</EyebrowLabel>
           <VaultSwitcher
             vaults={vaults}

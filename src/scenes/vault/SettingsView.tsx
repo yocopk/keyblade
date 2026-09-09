@@ -68,7 +68,7 @@ export function SettingsView({
   ];
 
   return (
-    <div className={styles.settings}>
+    <div data-anim="slide-in" className={styles.settings}>
       <div className={styles.group}>
         {rows.map((row) => {
           const id = `${groupId}-${row.key}`;
