@@ -115,6 +115,27 @@ code outright, and that guarantee has to survive the Windows integration
 means the cryptography can be read and audited without untangling it from
 application plumbing.
 
+## Installing a build
+
+> [!CAUTION]
+> **There is no vault yet.** The interface runs on sample data written into the
+> source: nothing is saved, nothing is encrypted, and **any password opens it**
+> because none is checked. Do not put a real credential in it. M1 is what turns
+> this into a vault.
+
+Windows will show a full-screen SmartScreen warning, because the installer is not
+signed with an Authenticode certificate. That is expected, and it is what an
+unsigned build from anyone looks like: **More info → Run anyway**.
+
+Signing properly means an EV certificate at roughly 300-400 EUR a year plus a
+hardware token, and reputation that accrues over months. That is a decision for
+when there is something worth distributing widely; until then, verify the
+download by its hash instead:
+
+```powershell
+Get-FileHash .\Keyblade_0.0.1_x64-setup.exe -Algorithm SHA256
+```
+
 ## Contributing
 
 Read [`CONTRIBUTING.md`](CONTRIBUTING.md). Contributions require agreeing to the

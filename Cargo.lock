@@ -1799,7 +1799,7 @@ dependencies = [
 
 [[package]]
 name = "keyblade"
-version = "0.0.0"
+version = "0.0.1"
 dependencies = [
  "keyblade-core",
  "serde",
@@ -1810,7 +1810,7 @@ dependencies = [
 
 [[package]]
 name = "keyblade-core"
-version = "0.0.0"
+version = "0.0.1"
 dependencies = [
  "argon2",
  "blake3",
